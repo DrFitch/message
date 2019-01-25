@@ -1,0 +1,27 @@
+<!-- <ion-header>
+  <ion-toolbar>
+   
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+
+  <h1>
+    Conversations
+  </h1>
+
+  <ion-searchbar id="searchbar" mode="ios"></ion-searchbar>
+
+  <ion-virtual-scroll [items]="items">
+    <ion-item *virtualItem="let item" lines="none">
+      <ion-avatar slot="start">
+        <img [src]="img">
+      </ion-avatar>
+      <ion-label>
+        <h2>Finn</h2>
+        <h3>I'm a big deal</h3>
+        <p>{{ item.text }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-virtual-scroll>
+</ion-content>
