@@ -1,9 +1,36 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>chat</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-title>{{ interlocutor }}</ion-title> -->
+    <ion-label>
+      <h2 class="interlocutor-name">{{ interlocutor }}</h2>
+      <h2 class="interlocutor-timestamp">Was online 13 minutes ago</h2>
+    </ion-label>
+    <ion-avatar slot="start">
+      <img [src]="img">
+    </ion-avatar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
-</ion-content>
+<div class="main">
+  <div class="chat-box">
+    <div class="message-area">
+      <div class="message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
+        <p>{{message.text}}</p>
+      </div>
+    </div>
+    <div class="emo-area">
+      <!-- emoji-panel component comes here -->
+    </div>
+    <div class="input-area">
+      <form (submit)="sendMessage()" name="messageForm" #messageForm="ngForm">
+        <ion-input type="text" name="message" id="message" [(ngModel)]="message" placeholder="Type a message here"></ion-input>
+        <button>
+          <ion-icon name="send"></ion-icon>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
