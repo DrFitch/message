@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "167658830381",
+    "firebase_url": "https://message-ynov.firebaseio.com",
+    "project_id": "message-ynov",
+    "storage_bucket": "message-ynov.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167658830381:android:c2ef45d40fef7587",
+        "android_client_info": {
+          "package_name": "com.ynov.message"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167658830381-4kiji77m65e68besh8hnhuv42f52kdob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLZoDuAycSfVETiM5ywKqP3H6_8A8ACmg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
