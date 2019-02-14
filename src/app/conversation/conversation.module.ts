@@ -12,6 +12,8 @@ import { ConversationPage } from './conversation.page';
     FormsModule,
     RouterModule.forChild([{ path: '', component: ConversationPage }])
   ],
-  declarations: [ConversationPage]
+  declarations: [
+    ConversationPage
+  ]
 })
 export class ConversationPageModule { }

@@ -11,36 +11,48 @@ export class ChatPage implements OnInit {
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
   messages = [
     {
-      text: 'Hey bruh',
+      text: 'Hey Peter',
       type: 'incoming'
     },
     {
-      text: 'Holy moly !!',
+      text: 'Hey! It was a long time ago!',
       type: 'outgoing'
     },
     {
-      text: 'How are you going bruh ?',
-      type: 'outgoing'
-    },
-    {
-      text: 'Well well my boy ! what\'s your plans for tomorrow night ?',
+      text: 'Yes I know, I was in Austria for 2 years and now I\'m back!',
       type: 'incoming'
     },
     {
-      text: 'Nothing planned yet and you bruh ? Was thinking about going to a nice cafe place, what doing think about that ?',
+      text: 'How was it ?',
+      type: 'outgoing'
+    },
+    {
+      text: 'Great man ! Very nice country, peope are nice',
+      type: 'incoming'
+    },
+    {
+      text: 'Cool! When do we catch up ?',
       type: 'outgoing'
     }
   ];
+
+  previousMessageType;
+  endGroup;
+  isInterlocutorWritting = true;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  getClasses(messageType) {
+  getClasses(messageType: string) {
+    this.endGroup = messageType !== this.previousMessageType;
+    this.previousMessageType = messageType;
+
     return {
       incoming: messageType === 'incoming',
       outgoing: messageType === 'outgoing',
+      grouped: this.endGroup
     };
   }
 

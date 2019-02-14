@@ -1,14 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button style="padding: 0!important; margin: 0!important;"></ion-back-button>
     </ion-buttons>
     <!-- <ion-title>{{ interlocutor }}</ion-title> -->
     <ion-label>
       <h2 class="interlocutor-name">{{ interlocutor }}</h2>
-      <h2 class="interlocutor-timestamp">Was online 13 minutes ago</h2>
+      <h2 class="interlocutor-timestamp">Online 13 minutes ago</h2>
     </ion-label>
-    <ion-avatar slot="start">
+    <ion-avatar class="align-avatar" slot="start">
       <img [src]="img">
     </ion-avatar>
   </ion-toolbar>
@@ -18,7 +18,19 @@
   <div class="chat-box">
     <div class="message-area">
       <div class="message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
+        <span>
+          <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
+            <img [src]="img">
+          </ion-avatar>
+        </span>
         <p>{{message.text}}</p>
+      </div>
+      <div *ngIf="isInterlocutorWritting" class="writting-status">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
     <div class="emo-area">
@@ -26,7 +38,8 @@
     </div>
     <div class="input-area">
       <form (submit)="sendMessage()" name="messageForm" #messageForm="ngForm">
-        <ion-input type="text" name="message" id="message" [(ngModel)]="message" placeholder="Type a message here"></ion-input>
+        <ion-input type="text" name="message" id="message" [(ngModel)]="message" placeholder="Type a message here">
+        </ion-input>
         <button>
           <ion-icon name="send"></ion-icon>
         </button>

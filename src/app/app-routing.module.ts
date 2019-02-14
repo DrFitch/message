@@ -3,7 +3,10 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
-  { path: 'chat', loadChildren: './conversation/chat/chat.module#ChatPageModule' }
+  { path: 'conversations', loadChildren: './tabs/tabs.module#ConversationPageModule' },
+  { path: 'chat', loadChildren: './conversation/chat/chat.module#ChatPageModule' },
+  { path: 'login', loadChildren: './login/login.module#LoginPageModule' }
+
 ];
 @NgModule({
   imports: [
@@ -11,4 +14,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

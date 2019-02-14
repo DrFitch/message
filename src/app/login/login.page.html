@@ -1,0 +1,14 @@
+<ion-content padding>
+
+  <h1>
+    Connexion
+  </h1>
+
+  <div class="btn-wrapper">
+    <ion-button *ngIf="!connecting" (click)="loginWithPhoneNumber()">
+      Se connecter
+    </ion-button>
+    <ion-spinner *ngIf="connecting" name="dots"></ion-spinner>
+  </div>
+
+</ion-content>
