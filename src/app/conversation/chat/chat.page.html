@@ -3,7 +3,6 @@
     <ion-buttons slot="start">
       <ion-back-button style="padding: 0!important; margin: 0!important;"></ion-back-button>
     </ion-buttons>
-    <!-- <ion-title>{{ interlocutor }}</ion-title> -->
     <ion-label>
       <h2 class="interlocutor-name">{{ interlocutor }}</h2>
       <h2 class="interlocutor-timestamp">Online 13 minutes ago</h2>
@@ -17,14 +16,13 @@
 <div class="main">
   <div class="chat-box">
     <div class="message-area">
-      <div class="message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
-        <span>
-          <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
-            <img [src]="img">
-          </ion-avatar>
-        </span>
+      <div class="message inline-message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
+        <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
+          <img [src]="img">
+        </ion-avatar>
         <p>{{message.text}}</p>
       </div>
+
       <div *ngIf="isInterlocutorWritting" class="writting-status">
         <div class="typing-indicator">
           <span></span>

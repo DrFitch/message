@@ -23,6 +23,10 @@ export class ChatPage implements OnInit {
       type: 'incoming'
     },
     {
+      text: 'So awesome',
+      type: 'incoming'
+    },
+    {
       text: 'How was it ?',
       type: 'outgoing'
     },
@@ -33,11 +37,14 @@ export class ChatPage implements OnInit {
     {
       text: 'Cool! When do we catch up ?',
       type: 'outgoing'
+    },
+    {
+      text: 'I\'m here the whole next week',
+      type: 'outgoing'
     }
   ];
 
   previousMessageType;
-  endGroup;
   isInterlocutorWritting = true;
 
   constructor() { }
@@ -46,13 +53,12 @@ export class ChatPage implements OnInit {
   }
 
   getClasses(messageType: string) {
-    this.endGroup = messageType !== this.previousMessageType;
+    const endGroup = messageType !== this.previousMessageType;
     this.previousMessageType = messageType;
-
     return {
       incoming: messageType === 'incoming',
       outgoing: messageType === 'outgoing',
-      grouped: this.endGroup
+      grouped: endGroup
     };
   }
 
