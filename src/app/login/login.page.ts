@@ -11,7 +11,7 @@ declare var cordova: any;
 export class LoginPage implements OnInit {
 
   connecting = false;
-  user = null;
+  user = {};
 
   constructor(private router: Router) { }
 
@@ -19,18 +19,15 @@ export class LoginPage implements OnInit {
   }
 
   loginWithPhoneNumber() {
+    const that = this;
     this.connecting = true;
     cordova.plugins.firebase.auth.verifyPhoneNumber('+33688911341', 30000).then(function (verificationId) {
       console.log('verificationId', verificationId);
       cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, '123456').then(function (userInfo) {
         console.log('userInfo', userInfo);
-        this.user = userInfo;
+        that.user = userInfo;
+        that.router.navigateByUrl(`/tabs/conversations/${userInfo.uid}`);
       });
     });
-
-    if (this.user) {
-      this.router.navigateByUrl('/conversations');
-    }
   }
-
 }

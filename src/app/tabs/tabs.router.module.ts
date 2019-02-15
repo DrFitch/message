@@ -13,6 +13,10 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: '../conversation/conversation.module#ConversationPageModule'
+          },
+          {
+            path: ':uid',
+            loadChildren: '../conversation/conversation.module#ConversationPageModule'
           }
         ]
       },

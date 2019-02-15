@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 declare var cordova: any;
 
@@ -9,7 +9,7 @@ declare var cordova: any;
   styleUrls: ['conversation.page.scss']
 })
 
-export class ConversationPage {
+export class ConversationPage implements OnInit {
 
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
   conversations = [
@@ -70,8 +70,11 @@ export class ConversationPage {
     }
   ];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
+  ngOnInit() {
+    console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
+  }
   openChat(conversationId: number) {
     this.router.navigateByUrl(`chat/${conversationId}`);
   }

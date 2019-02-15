@@ -16,7 +16,7 @@
 <div class="main">
   <div class="chat-box">
     <div class="message-area">
-      <div class="message inline-message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
+      <div class="message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
         <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
           <img [src]="img">
         </ion-avatar>
@@ -24,6 +24,9 @@
       </div>
 
       <div *ngIf="isInterlocutorWritting" class="writting-status">
+        <ion-avatar class="align-avatar-message" slot="start">
+          <img [src]="img">
+        </ion-avatar>
         <div class="typing-indicator">
           <span></span>
           <span></span>
