@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from 'src/core/models/user';
+import { AuthenticationService } from '../shared/authentication.service';
 
 declare var cordova: any;
 
@@ -10,6 +12,8 @@ declare var cordova: any;
 })
 
 export class ConversationPage implements OnInit {
+
+  userObj: User;
 
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
   conversations = [
@@ -70,10 +74,14 @@ export class ConversationPage implements OnInit {
     }
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private authSvc: AuthenticationService) { }
 
   ngOnInit() {
     console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
+    /*Get the current user's informations*/
+    this.authSvc.user$.subscribe(res => {
+      this.userObj = res;
+    });
   }
   openChat(conversationId: number) {
     this.router.navigateByUrl(`chat/${conversationId}`);

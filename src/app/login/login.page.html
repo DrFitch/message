@@ -5,7 +5,10 @@
   </h1>
 
   <div class="btn-wrapper">
-    <ion-button *ngIf="!connecting" (click)="loginWithPhoneNumber()">
+    <ion-input placeholder="Numéro de téléphone" [(ngModel)]="phoneNumber"></ion-input>
+    <ion-input placeholder="Prénom" [(ngModel)]="firstName"></ion-input>
+
+    <ion-button *ngIf="!connecting" (click)="logUser()">
       Se connecter
     </ion-button>
     <ion-spinner *ngIf="connecting" name="dots"></ion-spinner>
