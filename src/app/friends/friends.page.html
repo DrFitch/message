@@ -4,19 +4,21 @@
     Friends
   </h1>
 
-  <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar>
+  <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="filterContacts($event.target.value)"></ion-searchbar>
 
-  <!-- <ion-virtual-scroll [items]="conversations">
-    <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
+  <ion-list>
+    <ion-item *ngFor="let contact of filteredContacts" lines="none">
       <ion-avatar slot="start">
-        <img [src]="img">
+        <ngx-avatar [name]="contact.displayName"></ngx-avatar>
       </ion-avatar>
       <ion-label>
-        <h2>Finn</h2>
-        <h3>I'm a big deal</h3>
-        <p>{{ conversation.text }}</p>
+        <h2>{{ contact.displayName }}</h2>
+        <p *ngIf="contact.phoneNumbers; else noNumber"> {{ contact.phoneNumbers[0].value }} </p>
+        <ng-template #noNumber>
+          <p>No number</p>
+        </ng-template>
       </ion-label>
     </ion-item>
-  </ion-virtual-scroll> -->
+  </ion-list>
 
 </ion-content>
