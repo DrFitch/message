@@ -21,20 +21,20 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab2',
+        path: 'friends',
         children: [
           {
             path: '',
-            loadChildren: '../tab2/tab2.module#Tab2PageModule'
+            loadChildren: '../friends/friends.module#FriendsPageModule'
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'settings',
         children: [
           {
             path: '',
-            loadChildren: '../tab3/tab3.module#Tab3PageModule'
+            loadChildren: '../settings/settings.module#SettingsPageModule'
           }
         ]
       },

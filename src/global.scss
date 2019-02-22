@@ -14,3 +14,24 @@ html,
 body {
   font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
 }
+
+// cards presentation
+h1.header-module {
+  font-size: 40px;
+  font-weight: 300;
+  text-align: center;
+  width: 100%;
+  padding: 100px 0 70px 0px;
+}
+
+#main-searchbar {
+  display: flex;
+  flex-direction: column;
+  /deep/ .searchbar-input-container.sc-ion-searchbar-ios {
+    width: 90%;
+  }
+  /deep/ .searchbar-input.sc-ion-searchbar-ios {
+    border-radius: 20px !important;
+  }
+  padding-bottom: 20px;
+}
