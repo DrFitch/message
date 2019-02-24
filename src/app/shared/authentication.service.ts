@@ -27,14 +27,19 @@ export class AuthenticationService {
     that.connecting = true;
     cordova.plugins.firebase.auth.verifyPhoneNumber('+33672979570', 30000).then(function (verificationId) {
       console.log('verificationId', verificationId);
-      cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, '123456').then(function (userInfo) {
-        that.userObj.uid = userInfo.uid;
-        that.userObj.phoneNumber = userInfo.phoneNumber;
-        that.userObj.name = firstName;
-        that.user$ = of(that.userObj);
-        that.updateUserData(that.user$);
-        that.router.navigateByUrl(`/tabs/conversations/${userInfo.uid}`);
-      });
+      that.router.navigateByUrl(`/verification`);
+    });
+  }
+
+  verifSmsCode(verificationId: string, smsCode: string) {
+    const that = this;
+    cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, smsCode).then(function (userInfo) {
+      that.userObj.uid = userInfo.uid;
+      that.userObj.phoneNumber = userInfo.phoneNumber;
+      that.userObj.name = 'testVerif';
+      that.user$ = of(that.userObj);
+      that.updateUserData(that.user$);
+      that.router.navigateByUrl(`/tabs/conversations/${userInfo.uid}`);
     });
   }
 

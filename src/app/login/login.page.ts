@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Sim } from '@ionic-native/sim/ngx';
 import { AuthenticationService } from '../shared/authentication.service';
 
 declare var cordova: any;
@@ -17,13 +16,9 @@ export class LoginPage implements OnInit {
   user = {};
   firstName: string;
 
-  constructor(private router: Router, private authSvc: AuthenticationService, private sim: Sim) { }
+  constructor(private router: Router, private authSvc: AuthenticationService) { }
 
   ngOnInit() {
-    this.sim.getSimInfo().then(
-      (info) => console.log('Sim info: ', info),
-      (err) => console.log('Unable to get sim info: ', err)
-    );
   }
 
   logUser() {
