@@ -16,7 +16,7 @@ const routes: Routes = [
           },
           {
             path: ':uid',
-            loadChildren: '../conversation/conversation.module#ConversationPageModule'
+            loadChildren: '../conversation/chat/chat.module#ChatPageModule'
           }
         ]
       },

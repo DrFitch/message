@@ -4,7 +4,12 @@
     Conversations
   </h1>
 
-  <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar>
+  <div class="header-search">
+    <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar>
+    <ion-button class="new-conversation-button" shape="round" color="dark" size="small">
+      <ion-icon class="new-conversation-icon" slot="icon-only" name="add"></ion-icon>
+    </ion-button>
+  </div>
 
   <ion-virtual-scroll [items]="conversations">
     <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">

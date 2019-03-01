@@ -39,8 +39,8 @@ export class AuthenticationService {
 
     const signInCredential = firebase.auth.PhoneAuthProvider.credential(verificationId, smsCode);
     console.log('signInCredential: ', signInCredential);
-
     cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, smsCode).then(function (userInfo) {
+      console.log('userinfo', userInfo);
       that.userObj.uid = userInfo.uid;
       that.userObj.phoneNumber = userInfo.phoneNumber;
       that.userObj.name = firstName;
