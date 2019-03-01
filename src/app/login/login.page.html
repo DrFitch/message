@@ -5,12 +5,13 @@
   </h1>
 
   <div class="btn-wrapper">
-    <ion-input placeholder="Numéro de téléphone" [(ngModel)]="phoneNumber"></ion-input>
-    <ion-input placeholder="Prénom" [(ngModel)]="firstName"></ion-input>
+    <ion-input placeholder="Phone number" [(ngModel)]="phoneNumber"></ion-input>
+    <ion-input placeholder="Firstname" [(ngModel)]="firstName"></ion-input>
 
     <ion-button *ngIf="!connecting" (click)="logUser()">
-      Se connecter
+      Connect me
     </ion-button>
+
     <ion-spinner *ngIf="connecting" name="dots"></ion-spinner>
   </div>
 

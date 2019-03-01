@@ -18,16 +18,21 @@ export class AuthenticationService {
   userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init' };
 
   constructor(private router: Router, private afs: AngularFirestore) {
-    const that = this;
-    that.user$ = new Observable<User>();
+    this.user$ = new Observable<User>();
   }
 
   loginWithPhoneNumber(phoneNumber: string, firstName: string) {
+    console.log('fdp#2');
+
     const that = this;
     that.connecting = true;
-    cordova.plugins.firebase.auth.verifyPhoneNumber('+33672979570', 30000).then(function (verificationId) {
+    this.user$.subscribe(result => {
+      console.log('result obs', result);
+    });
+    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000).then(function (verificationId) {
       console.log('verificationId', verificationId);
       cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, '123456').then(function (userInfo) {
+        console.log('userInfo', userInfo);
         that.userObj.uid = userInfo.uid;
         that.userObj.phoneNumber = userInfo.phoneNumber;
         that.userObj.name = firstName;
@@ -40,8 +45,8 @@ export class AuthenticationService {
 
   private updateUserData(user) {
     // Sets user data to firestore on login
-
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.value.uid}`);
+    console.log('user', user);
+    const userRef: AngularFirestoreDocument<any> = this.afs.collection('users').doc(user.value.uid); // doc(`users/${user.value.uid}`);
 
     const data: User = {
       uid: user.value.uid,
