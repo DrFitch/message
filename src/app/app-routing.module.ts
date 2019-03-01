@@ -6,7 +6,8 @@ const routes: Routes = [
   { path: 'conversations', loadChildren: './tabs/tabs.module#ConversationPageModule' },
   { path: 'chat', loadChildren: './conversation/chat/chat.module#ChatPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },  { path: 'friends', loadChildren: './friends/friends.module#FriendsPageModule' },
-  { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' }
+  { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
+  { path: 'verification', loadChildren: './verification/verification.module#VerificationPageModule' }
 
 
 ];

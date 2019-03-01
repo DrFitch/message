@@ -22,11 +22,11 @@ export class FriendsPage implements OnInit {
   }
 
   loadContacts() {
-    const options = new ContactFindOptions();
-    options.filter = '';
-    options.multiple = true;
-    const fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-    navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError, options);
+    // const options = new ContactFindOptions();
+    // options.filter = '';
+    // options.multiple = true;
+    // const fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+    // navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError, options);
   }
 
   onSuccess(contacts) {

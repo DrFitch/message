@@ -1,0 +1,17 @@
+<ion-content padding>
+
+  <h1>
+    Vérification SMS
+  </h1>
+
+  <div class="btn-wrapper">
+    <ion-input placeholder="Code SMS (6 chiffres)" [(ngModel)]="smsCode"></ion-input>
+    <ion-input placeholder="Prénom" [(ngModel)]="firstName"></ion-input>
+
+    <ion-button *ngIf="!connecting" (click)="logOnVerifiation()">
+      Se connecter
+    </ion-button>
+    <ion-spinner *ngIf="connecting" name="dots"></ion-spinner>
+  </div>
+
+</ion-content>
