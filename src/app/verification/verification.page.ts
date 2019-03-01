@@ -10,14 +10,20 @@ import { AuthenticationService } from '../shared/authentication.service';
 export class VerificationPage implements OnInit {
 
   smsCode: string;
+  firstName: string;
 
   constructor(private authSvc: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
   }
 
-  logOnVerifiation(verificationID: string, smsCode: string) {
-    this.authSvc.verifSmsCode(verificationID, smsCode);
+  logOnVerifiation() {
+    if (this.authSvc.verificationID) {
+      this.authSvc.verifSmsCode(this.authSvc.verificationID, this.smsCode, this.firstName);
+    } else {
+      console.log('Nope');
+    }
+
   }
 
 }

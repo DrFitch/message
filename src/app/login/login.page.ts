@@ -14,7 +14,6 @@ export class LoginPage implements OnInit {
   phoneNumber: string;
   connecting = false;
   user = {};
-  firstName: string;
 
   constructor(private router: Router, private authSvc: AuthenticationService) { }
 
@@ -23,8 +22,7 @@ export class LoginPage implements OnInit {
 
   logUser() {
     // tslint:disable-next-line:max-line-length
-    this.authSvc.loginWithPhoneNumber('+33672979570', 'Pierre');
+    this.authSvc.loginWithPhoneNumber(this.phoneNumber);
     console.log('phoneNumber: ', this.phoneNumber);
-    console.log('firstName: ', this.firstName);
   }
 }

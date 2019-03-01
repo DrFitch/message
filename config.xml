@@ -85,6 +85,7 @@
     <plugin name="cordova-plugin-firebase-authentication" spec="~1.0.1" />
     <plugin name="cordova-plugin-contacts" spec="3.0.1" />
     <allow-navigation href="http://10.31.0.231:8100" sessionid="448d1051" />
-    <engine name="android" spec="7.1.4" />
     <plugin name="cordova-plugin-contacts" spec="3.0.1" />
+    <allow-navigation href="http://10.31.0.242:8100" sessionid="3fd95ebc" />
+    <engine name="android" spec="7.1.4" />
 </widget>

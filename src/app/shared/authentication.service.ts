@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 import { Observable, of } from 'rxjs';
 import { User } from 'src/core/models/user';
 
@@ -13,6 +14,7 @@ declare var cordova: any;
 export class AuthenticationService {
   phoneNumber: string;
   connecting = false;
+  verificationID: string;
   user$: Observable<User>;
   /*Init user object*/
   userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init' };
@@ -22,21 +24,26 @@ export class AuthenticationService {
     that.user$ = new Observable<User>();
   }
 
-  loginWithPhoneNumber(phoneNumber: string, firstName: string) {
+  loginWithPhoneNumber(phoneNumber: string) {
     const that = this;
     that.connecting = true;
-    cordova.plugins.firebase.auth.verifyPhoneNumber('+33672979570', 30000).then(function (verificationId) {
+    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000).then(function (verificationId) {
       console.log('verificationId', verificationId);
+      that.verificationID = verificationId;
       that.router.navigateByUrl(`/verification`);
     });
   }
 
-  verifSmsCode(verificationId: string, smsCode: string) {
+  verifSmsCode(verificationId: string, smsCode: string, firstName: string) {
     const that = this;
+
+    const signInCredential = firebase.auth.PhoneAuthProvider.credential(verificationId, smsCode);
+    console.log('signInCredential: ', signInCredential);
+
     cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, smsCode).then(function (userInfo) {
       that.userObj.uid = userInfo.uid;
       that.userObj.phoneNumber = userInfo.phoneNumber;
-      that.userObj.name = 'testVerif';
+      that.userObj.name = firstName;
       that.user$ = of(that.userObj);
       that.updateUserData(that.user$);
       that.router.navigateByUrl(`/tabs/conversations/${userInfo.uid}`);
