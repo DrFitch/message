@@ -1,16 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ConversationPage } from './conversation.page';
 
+const routes: Routes = [
+  {
+    path: '',
+    component: ConversationPage
+  }
+];
+
 @NgModule({
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: ConversationPage }])
+    IonicModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [
     ConversationPage
