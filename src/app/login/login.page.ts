@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../shared/authentication.service';
 
 declare var cordova: any;
 
@@ -10,24 +11,18 @@ declare var cordova: any;
 })
 export class LoginPage implements OnInit {
 
+  phoneNumber: string;
   connecting = false;
   user = {};
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authSvc: AuthenticationService) { }
 
   ngOnInit() {
   }
 
-  loginWithPhoneNumber() {
-    const that = this;
-    this.connecting = true;
-    cordova.plugins.firebase.auth.verifyPhoneNumber('+33688911341', 30000).then(function (verificationId) {
-      console.log('verificationId', verificationId);
-      cordova.plugins.firebase.auth.signInWithVerificationId(verificationId, '123456').then(function (userInfo) {
-        console.log('userInfo', userInfo);
-        that.user = userInfo;
-        that.router.navigateByUrl(`/tabs/conversations/${userInfo.uid}`);
-      });
-    });
+  logUser() {
+    // tslint:disable-next-line:max-line-length
+    this.authSvc.loginWithPhoneNumber(this.phoneNumber);
+    console.log('phoneNumber: ', this.phoneNumber);
   }
 }

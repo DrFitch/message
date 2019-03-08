@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -46,10 +47,24 @@ export class ChatPage implements OnInit {
 
   previousMessageType;
   isInterlocutorWritting = true;
+  conversationId;
+  isLoading: boolean;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.conversationId = this.route.snapshot.paramMap.get('uid');
+    if (this.conversationId) {
+      this.loadMessages();
+    }
+    console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
+  }
+
+  loadMessages(): any {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 3000);
   }
 
   getClasses(messageType: string) {

@@ -1,19 +1,34 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { AvatarModule } from 'ngx-avatar';
 import { ConversationPage } from './conversation.page';
+import { NewConversationPage } from './new-conversation/new-conversation.page';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: ConversationPage
+  },
+  {
+    path: 'new',
+    component: NewConversationPage
+  }
+];
 
 @NgModule({
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: ConversationPage }])
+    IonicModule,
+    RouterModule.forChild(routes),
+    AvatarModule
   ],
   declarations: [
-    ConversationPage
+    ConversationPage,
+    NewConversationPage
   ]
 })
 export class ConversationPageModule { }

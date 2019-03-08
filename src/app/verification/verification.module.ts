@@ -1,15 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
+
 import { IonicModule } from '@ionic/angular';
-import { ChatPage } from './chat.page';
+
+import { VerificationPage } from './verification.page';
 
 const routes: Routes = [
   {
-    // path: ':id',
     path: '',
-    component: ChatPage
+    component: VerificationPage
   }
 ];
 
@@ -20,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ChatPage]
+  declarations: [VerificationPage]
 })
-export class ChatPageModule { }
+export class VerificationPageModule {}

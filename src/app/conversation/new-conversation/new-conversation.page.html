@@ -1,0 +1,26 @@
+<ion-content>
+
+  <h1 class="header-module">
+    Nouvelle conversation
+  </h1>
+
+  <div class="header-search">
+    <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar>
+  </div>
+
+  <ion-list>
+    <ion-item *ngFor="let contact of filteredContacts" lines="none">
+      <ion-avatar slot="start">
+        <ngx-avatar [name]="contact.displayName"></ngx-avatar>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ contact.displayName }}</h2>
+        <p *ngIf="contact.phoneNumbers; else noNumber"> {{ contact.phoneNumbers[0].value }} </p>
+        <ng-template #noNumber>
+          <p>No number</p>
+        </ng-template>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
