@@ -1,0 +1,28 @@
+/deep/ .avatar-content {
+  height: 40px !important;
+  width: 40px !important;
+  line-height: 40px !important;
+}
+
+/deep/ ion-checkbox {
+  margin-right: 15px !important;
+}
+
+.header-md:after {
+  display: none;
+}
+
+.fix-toolbar {
+  position: absolute;
+}
+
+.ok-button {
+  padding-right: 20px;
+  padding-top: 10px;
+}
+
+.ok-button-text {
+  font-size: 18px;
+  font-weight: 400;
+  color: black;
+}

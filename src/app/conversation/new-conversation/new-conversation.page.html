@@ -1,7 +1,18 @@
+<ion-header translucent="true">
+  <ion-toolbar class="fix-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button style="padding: 0!important; margin: 0!important;"></ion-back-button>
+    </ion-buttons>
+    <ion-label class="ok-button" slot="end" (click)="createConversation()">
+      <p class="ok-button-text">Go !</p>
+    </ion-label>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
 
   <h1 class="header-module">
-    Nouvelle conversation
+    New conversation
   </h1>
 
   <div class="header-search">
@@ -10,6 +21,7 @@
 
   <ion-list>
     <ion-item *ngFor="let contact of filteredContacts" lines="none">
+      <ion-checkbox slot="start" mode="ios" [(ngModel)]="contact.isSelected"></ion-checkbox>
       <ion-avatar slot="start">
         <ngx-avatar [name]="contact.displayName"></ngx-avatar>
       </ion-avatar>

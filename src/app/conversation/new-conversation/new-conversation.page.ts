@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ConversationService } from '../conversation.service';
+
+declare var navigator;
+declare var ContactFindOptions;
 
 @Component({
   selector: 'app-new-conversation',
@@ -11,7 +15,7 @@ export class NewConversationPage implements OnInit {
   searchTerms = '';
   filteredContacts: any;
 
-  constructor() { }
+  constructor(private conversationSvc: ConversationService) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -40,6 +44,12 @@ export class NewConversationPage implements OnInit {
 
   filterContacts(searchTerm) {
     this.filteredContacts = this.contacts.filter(item => item.displayName.toLowerCase().indexOf(searchTerm) !== -1);
+  }
+
+  createConversation() {
+    const selectedContact = this.contacts.filter(contact => contact.isSelected === true);
+    console.log('create conversation with members : ', selectedContact);
+    this.conversationSvc.createConversation('id87jYN51zeBei5azwel2IoYzR93', null);
   }
 
 }
