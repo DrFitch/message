@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<div class="main">
+<div *ngIf="!isLoading; else loader" class="main">
   <div class="chat-box">
     <div class="message-area">
       <div class="message" *ngFor="let message of messages" [ngClass]="getClasses(message.type)">
@@ -48,3 +48,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #loader>
+  <ion-spinner id="loader" name="crescent"></ion-spinner>
+</ng-template>
