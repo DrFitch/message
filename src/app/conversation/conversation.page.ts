@@ -90,5 +90,10 @@ export class ConversationPage implements OnInit {
     this.router.navigateByUrl(`tabs/conversations/${conversationId}`);
   }
 
+  newConversation() {
+    console.log('new conversation');
+    this.router.navigateByUrl(`tabs/conversations/new`);
+  }
+
 
 }

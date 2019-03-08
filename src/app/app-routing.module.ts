@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   // { path: 'friends', loadChildren: './friends/friends.module#FriendsPageModule' },
   // { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
-  { path: 'verification', loadChildren: './verification/verification.module#VerificationPageModule' }
+  { path: 'verification', loadChildren: './verification/verification.module#VerificationPageModule' },  { path: 'new-conversation', loadChildren: './conversation/new-conversation/new-conversation.module#NewConversationPageModule' }
+
 
 
 ];

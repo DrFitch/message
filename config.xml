@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://10.31.0.231:8100" />
+    <content original-src="index.html" src="http://10.31.1.35:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -87,5 +87,6 @@
     <allow-navigation href="http://10.31.0.231:8100" sessionid="448d1051" />
     <plugin name="cordova-plugin-contacts" spec="3.0.1" />
     <allow-navigation href="http://10.31.0.242:8100" sessionid="3fd95ebc" />
+    <allow-navigation href="http://10.31.1.35:8100" sessionid="5f2fe5e5" />
     <engine name="android" spec="7.1.4" />
 </widget>
