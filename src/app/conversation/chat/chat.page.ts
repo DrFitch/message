@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { orderBy } from 'lodash';
+import { Message } from 'src/core/models/message';
+import { ConversationService } from '../conversation.service';
 
 @Component({
   selector: 'app-chat',
@@ -8,71 +11,80 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ChatPage implements OnInit {
 
-  interlocutor = 'Pierre Cicuto';
-  img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
-  messages = [
-    {
-      text: 'Hey Peter',
-      type: 'incoming'
-    },
-    {
-      text: 'Hey! It was a long time ago!',
-      type: 'outgoing'
-    },
-    {
-      text: 'Yes I know, I was in Austria for 2 years and now I\'m back!',
-      type: 'incoming'
-    },
-    {
-      text: 'So awesome',
-      type: 'incoming'
-    },
-    {
-      text: 'How was it ?',
-      type: 'outgoing'
-    },
-    {
-      text: 'Great man ! Very nice country, peope are nice',
-      type: 'incoming'
-    },
-    {
-      text: 'Cool! When do we catch up ?',
-      type: 'outgoing'
-    },
-    {
-      text: 'I\'m here the whole next week',
-      type: 'outgoing'
-    }
-  ];
+  // @ViewChild('sendButton') sendButton: Button;
+  @ViewChild('chat') private myScrollContainer: ElementRef;
 
-  previousMessageType;
+  members = [];
+  message = '';
+  img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
+  messages: Message[];
+
+  previousSenderId;
   isInterlocutorWritting = true;
   conversationId;
   isLoading: boolean;
+  userUid: string;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private conversationSvc: ConversationService) { }
 
   ngOnInit() {
     this.conversationId = this.route.snapshot.paramMap.get('uid');
     if (this.conversationId) {
       this.loadMessages();
+      this.userUid = 'IGyZdaotm2s87FpWAaVk';
     }
-    console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
   }
 
   loadMessages(): any {
     this.isLoading = true;
-    setTimeout(() => {
+    this.conversationSvc.getMessages(this.conversationId).subscribe(messages => {
+      this.messages = orderBy(messages, ['createdAt'], ['asc']);
       this.isLoading = false;
-    }, 3000);
+    });
   }
 
-  getClasses(messageType: string) {
-    const endGroup = messageType !== this.previousMessageType;
-    this.previousMessageType = messageType;
+  sendMessage() {
+    this.scrollToBottom();
+    this.conversationSvc.addMessages(this.conversationId, this.userUid, this.message).subscribe(() => {
+      this.conversationSvc.registerDisplayMessage(this.conversationId, this.message);
+      this.message = '';
+    });
+  }
+
+  getConversationInterlocutors() {
+    let result = '';
+    if (this.members) {
+      this.members.forEach(interlocutor => {
+        result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
+      });
+    }
+    return result;
+  }
+
+  scrollToBottom(): void {
+    try {
+      setTimeout(() => {
+        this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight + 600;
+      }, 300);
+    } catch (err) {
+      console.log('err:', err);
+    }
+  }
+
+  emitUserTyping(): void {
+    this.conversationSvc.setUserIsTyping(this.conversationId, this.userUid);
+  }
+
+  registerDisplayMessage() {
+
+  }
+
+  getClasses(senderId: string) {
+    const endGroup = senderId !== this.previousSenderId;
+    this.previousSenderId = senderId;
     return {
-      incoming: messageType === 'incoming',
-      outgoing: messageType === 'outgoing',
+      incoming: this.userUid !== senderId,
+      outgoing: this.userUid === senderId,
       grouped: endGroup
     };
   }

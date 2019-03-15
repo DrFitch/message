@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Conversation } from 'src/core/models/conversation';
 import { User } from 'src/core/models/user';
 import { AuthenticationService } from '../shared/authentication.service';
+import { ConversationService } from './conversation.service';
 
 declare var cordova: any;
 
@@ -17,81 +19,36 @@ export class ConversationPage implements OnInit {
   userUid: string;
 
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
-  conversations = [
-    {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }, {
-      id: 1,
-      text: 'message'
-    }
-  ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private authSvc: AuthenticationService) { }
+  conversations: Conversation[] = [];
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private authSvc: AuthenticationService,
+    public conversationSvc: ConversationService
+  ) { }
 
   ngOnInit() {
     // console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
-    /*Get the current user's informations*/
     this.authSvc.user$.subscribe(res => {
       this.userObj = res;
     });
-    this.userUid = 'AbfEV7nW8YhOh3BhnxMwbH5iBWe2';
+    this.userUid = 'IGyZdaotm2s87FpWAaVk';
+    this.loadConversations();
   }
 
-  openChat(conversationId: number) {
+  loadConversations() {
+    this.conversationSvc.getConversationsForUser(this.userUid).subscribe(conversations => {
+      this.conversations = conversations;
+      console.log('this.conversation', conversations);
+    });
+  }
+
+  openChat(conversationId: string) {
     this.router.navigateByUrl(`tabs/conversations/${conversationId}`);
   }
 
   newConversation() {
-    console.log('new conversation');
     this.router.navigateByUrl(`tabs/conversations/new`);
   }
 

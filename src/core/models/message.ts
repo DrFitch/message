@@ -1,7 +1,9 @@
-export class User {
-    uid: string;
-    name: string;
-    phoneNumber: string;
+
+export class Message {
+
+    createdAt: Date;
+    senderId: string;
+    text: string;
 
     constructor(data: any) {
         for (const key in data) {

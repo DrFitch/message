@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConversationService } from '../conversation.service';
 
 declare var navigator;
@@ -14,8 +15,9 @@ export class NewConversationPage implements OnInit {
   contacts;
   searchTerms = '';
   filteredContacts: any;
+  members = [];
 
-  constructor(private conversationSvc: ConversationService) { }
+  constructor(private conversationSvc: ConversationService, private router: Router) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -49,7 +51,10 @@ export class NewConversationPage implements OnInit {
   createConversation() {
     const selectedContact = this.contacts.filter(contact => contact.isSelected === true);
     console.log('create conversation with members : ', selectedContact);
-    this.conversationSvc.createConversation('id87jYN51zeBei5azwel2IoYzR93', null);
+    this.members.push('cw1jmSYNk3Yh4wR8C0k1anvNFet2');
+    this.conversationSvc.createConversation('id87jYN51zeBei5azwel2IoYzR93', this.members).subscribe(documentId => {
+      this.router.navigateByUrl(`tabs/conversations/${documentId}`);
+    });
   }
 
 }
