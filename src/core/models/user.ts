@@ -1,7 +1,7 @@
 export class User {
     uid: string;
-    name: string;
-    phoneNumber: string;
+    name?: string;
+    phoneNumber?: string;
 
     constructor(data: any) {
         for (const key in data) {

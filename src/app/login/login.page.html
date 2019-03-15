@@ -5,7 +5,7 @@
   </h1>
 
   <div class="btn-wrapper">
-    <ion-input placeholder="Numéro de téléphone" type="tel" [(ngModel)]="phoneNumber"></ion-input>
+    <ion-input placeholder="+33 ..." [(ngModel)]="phoneNumber"></ion-input>
 
     <ion-button *ngIf="!connecting" (click)="logUser()">
       Se connecter
