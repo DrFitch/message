@@ -40,6 +40,7 @@ export class ChatPage implements OnInit {
     this.conversationSvc.getMessages(this.conversationId).subscribe(messages => {
       this.messages = orderBy(messages, ['createdAt'], ['asc']);
       this.isLoading = false;
+      this.scrollToBottom();
     });
   }
 

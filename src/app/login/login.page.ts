@@ -11,7 +11,7 @@ declare var cordova: any;
 })
 export class LoginPage implements OnInit {
 
-  phoneNumber: string;
+  userPhoneNumber: string;
   connecting = false;
   user = {};
 
@@ -21,8 +21,6 @@ export class LoginPage implements OnInit {
   }
 
   logUser() {
-    // tslint:disable-next-line:max-line-length
-    this.authSvc.loginWithPhoneNumber(this.phoneNumber);
-    console.log('phoneNumber: ', this.phoneNumber);
+    this.authSvc.loginWithPhoneNumber(this.userPhoneNumber);
   }
 }

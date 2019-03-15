@@ -6,6 +6,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { Contacts } from '@ionic-native/contacts/ngx';
+import { Firebase } from '@ionic-native/firebase/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -26,7 +27,7 @@ import { AppComponent } from './app.component';
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [
     StatusBar,
@@ -35,7 +36,8 @@ import { AppComponent } from './app.component';
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
     },
-    Contacts
+    Contacts,
+    Firebase
   ],
   bootstrap: [AppComponent]
 })

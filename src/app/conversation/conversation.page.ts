@@ -16,7 +16,6 @@ declare var cordova: any;
 export class ConversationPage implements OnInit {
 
   userObj: User;
-  userTest: User;
   userUid: string;
 
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
@@ -34,10 +33,7 @@ export class ConversationPage implements OnInit {
     this.authSvc.user$.subscribe(res => {
       this.userObj = res;
     });
-    this.authSvc.subjectUser$.subscribe(res => {
-      this.userTest = res;
-    });
-    this.userUid = 'cw1jmSYNk3Yh4wR8C0k1anvNFet2';
+    this.userUid = 'IGyZdaotm2s87FpWAaVk';
     this.loadConversations();
   }
 
@@ -45,7 +41,6 @@ export class ConversationPage implements OnInit {
     this.conversationSvc.getConversationsForUser(this.userUid).subscribe(conversations => {
       this.conversations = conversations;
       console.log('this.conversation', conversations);
-      console.log('Mon user', this.userTest);
     });
   }
 

@@ -44,7 +44,8 @@
           placeholder="Type a message here" (click)="emitUserTyping(); scrollToBottom()">
         </ion-input>
         <button (click)="inputMessage.setFocus()">
-          <ion-icon name="send"></ion-icon>
+          <ion-icon [ngStyle]="{'color': message !== '' ? '#09f' : '' }" name="send" style="font-size: 24px;">
+          </ion-icon>
         </button>
       </form>
     </div>
