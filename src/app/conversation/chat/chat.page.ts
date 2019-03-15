@@ -48,6 +48,7 @@ export class ChatPage implements OnInit {
     this.conversationSvc.addMessages(this.conversationId, this.userUid, this.message).subscribe(() => {
       this.conversationSvc.registerDisplayMessage(this.conversationId, this.message);
       this.message = '';
+      this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
     });
   }
 
