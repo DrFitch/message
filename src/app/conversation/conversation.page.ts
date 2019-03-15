@@ -80,8 +80,9 @@ export class ConversationPage implements OnInit {
   ngOnInit() {
     // console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
     /*Get the current user's informations*/
-    this.authSvc.user$.subscribe(res => {
+    this.authSvc.subjectUser$.subscribe(res => {
       this.userObj = res;
+      console.log('userObject$ : ', res);
     });
     this.userUid = 'AbfEV7nW8YhOh3BhnxMwbH5iBWe2';
   }

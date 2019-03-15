@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ContactFindOptions } from '@ionic-native/contacts';
+
+declare var navigator;
 
 @Component({
   selector: 'app-new-conversation',
@@ -26,7 +29,7 @@ export class NewConversationPage implements OnInit {
     options.filter = '';
     options.multiple = true;
     const fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-    navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError, options);
+    navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError);
   }
 
   onSuccess(contacts) {
