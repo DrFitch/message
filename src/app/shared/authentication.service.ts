@@ -38,10 +38,6 @@ export class AuthenticationService {
     );
   }
 
-  get loggedIn() {
-    return !!this.subjectUser$.value;
-  }
-
   loginWithPhoneNumber(phoneNumber: string) {
     const that = this;
     this.connecting = true;
