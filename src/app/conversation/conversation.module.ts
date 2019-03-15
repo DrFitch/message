@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { AvatarModule } from 'ngx-avatar';
 import { ConversationPage } from './conversation.page';
+import { ConversationService } from './conversation.service';
 import { NewConversationPage } from './new-conversation/new-conversation.page';
 
 const routes: Routes = [
@@ -29,6 +30,9 @@ const routes: Routes = [
   declarations: [
     ConversationPage,
     NewConversationPage
+  ],
+  providers: [
+    ConversationService
   ]
 })
 export class ConversationPageModule { }
