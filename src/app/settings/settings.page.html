@@ -4,7 +4,9 @@
     Settings
   </h1>
 
-  <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar>
+  <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+
+  <!-- <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar> -->
 
   <!-- <ion-virtual-scroll [items]="conversations">
     <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
