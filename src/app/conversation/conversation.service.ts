@@ -107,4 +107,23 @@ export class ConversationService {
     }, { merge: true });
   }
 
+  unsetUserIsTyping(conversationId, userId: string) {
+
+    let typersArray = [];
+
+    this.afs.collection(`conversations`).doc(conversationId).valueChanges().pipe(
+      map(conversation => {
+        typersArray = conversation['isTyping'];
+        this.afs.collection(`conversations`).doc(conversationId).update({
+          isTyping: typersArray.filter(typer => typer.id !== userId)
+        });
+      })
+    );
+
+    console.log('isTyping', typersArray);
+
+    this.afs.collection(`conversations`).doc(conversationId).update({
+      isTyping: typersArray.filter(typer => typer.id !== userId)
+    });
+  }
 }
