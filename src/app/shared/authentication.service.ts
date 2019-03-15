@@ -25,7 +25,6 @@ export class AuthenticationService {
   constructor(private router: Router, private afs: AngularFirestore, private afAuth: AngularFireAuth) {
     this.user$ = new Observable<User>();
     this.subjectUser$ = new BehaviorSubject<User>(null);
-    this.subjectUser$.next(null);
 
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
@@ -64,7 +63,7 @@ export class AuthenticationService {
       that.userObj.name = 'UserTest'; // firstName
       that.subjectUser$.next(that.userObj);
       that.updateUserData(that.subjectUser$);
-      that.router.navigateByUrl(`/tabs/conversations/${userInfo.uid}`);
+      that.router.navigateByUrl(`/tabs/conversations`);
     });
   }
 

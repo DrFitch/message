@@ -31,7 +31,7 @@ export class ChatPage implements OnInit {
     this.conversationId = this.route.snapshot.paramMap.get('uid');
     if (this.conversationId) {
       this.loadMessages();
-      this.userUid = 'IGyZdaotm2s87FpWAaVk';
+      this.userUid = 'cw1jmSYNk3Yh4wR8C0k1anvNFet2';
     }
   }
 
