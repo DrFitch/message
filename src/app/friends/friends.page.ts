@@ -18,6 +18,7 @@ export class FriendsPage implements OnInit {
   filteredContacts: any;
   usersList: User[];
   macthingContact: any;
+  searchedContact: any;
 
   constructor(private afs: AngularFirestore, private friendSvc: FriendsSvcService) { }
 
@@ -26,6 +27,7 @@ export class FriendsPage implements OnInit {
     this.friendSvc.getUserInfos().subscribe(user => {
       this.usersList = user;
       console.log('direct: ', this.usersList);
+      console.log('direct: ', this.filteredContacts);
       this.matchContactOnPhone();
     });
   }
@@ -64,7 +66,9 @@ export class FriendsPage implements OnInit {
   }
 
   filterContacts(searchTerm) {
-    this.filteredContacts = this.contacts.filter(item => item.displayName.toLowerCase().indexOf(searchTerm) !== -1);
+    console.log(searchTerm);
+    this.searchedContact = this.usersList.filter(x => x.name.match(searchTerm));
+    // this.filteredContacts = this.contacts.filter(item => item.displayName.toLowerCase().indexOf(searchTerm) !== -1);
   }
 
 }
