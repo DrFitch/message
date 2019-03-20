@@ -44,6 +44,10 @@ export class ConversationPage implements OnInit {
     });
   }
 
+  displayLastMessage(conversation: Conversation) {
+    return conversation.displayMessage.replace(/<\/?[^>]+>/ig, ' ');
+  }
+
   openChat(conversationId: string) {
     this.router.navigateByUrl(`tabs/conversations/${conversationId}`);
   }
@@ -52,5 +56,25 @@ export class ConversationPage implements OnInit {
     this.router.navigateByUrl(`tabs/conversations/new`);
   }
 
+  getPresenceLightColor(conversation: Conversation) {
+    const listOfUsersInConversation = conversation.users.filter(x => x.uid !== this.userUid);
+    // ? si il n'y a que deux utilisateurs dans la conversation on fait en sorte d'afficher le status de connexion du partenaire
+    if (listOfUsersInConversation.length === 1) {
+      if (listOfUsersInConversation[0].status) {
+        // ! on gere les trois etats pour une discussion avec un seul destinataire
+        return {
+          online: listOfUsersInConversation[0].status.status === 'online',
+          away: listOfUsersInConversation[0].status.status === 'away',
+          offline: listOfUsersInConversation[0].status.status === 'offline',
+        };
+      }
+    } else { // ? si il s'agit d'un groupe d'utilisateur on vérifie qu'il y ai au moins un utilisateur de connecté
+      if (conversation.users.find(x => x.status.status === 'online')) {
+        return {
+          online: true
+        };
+      }
+    }
+  }
 
 }

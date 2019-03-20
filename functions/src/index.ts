@@ -1,10 +1,22 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+
+const firestore = admin.firestore();
 admin.initializeApp();
 
-export const notifyUserNewMessage = functions.firestore.document('conversations/{document}/messages').onCreate((change, context) => {
+export const notifyUserNewMessage2 = functions.firestore.document('conversations/{document}/messages').onCreate((change, context) => {
+    // const db = admin.firestore();
+    const snapshot = change.data();
+    console.log('snapshot', snapshot);
     console.log('change', change);
     console.log('context', context);
+
+    // db.collection('conversations').doc(context.params.document).collection('messages').doc(context.params.message).get().then(test => {
+    //     console.log('test', test);
+    // }).catch(err => {
+    //     console.log('error while getting message sended');
+    // })
+
     const payload = {
         notification: {
             title: 'Nouveau message',

@@ -3,9 +3,11 @@ import { User } from './user';
 export class Conversation {
 
     id: string;
-    memberIds: any;
+    memberIds: [];
     profilePicture: string;
+    displayMessage: string;
     users: User[];
+    status: any;
 
     constructor(data: any) {
         for (const key in data) {

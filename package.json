@@ -47,6 +47,7 @@
     "lodash": "^4.17.11",
     "ngx-avatar": "^3.2.0",
     "ngx-international-phone-number": "^1.0.4",
+    "ngx-markdown": "^7.1.4",
     "rxjs": "~6.3.3",
     "vanilla-text-mask": "^5.1.1",
     "zone.js": "~0.8.29"

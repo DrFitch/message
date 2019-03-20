@@ -15,10 +15,11 @@
     <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
       <ion-avatar slot="start">
         <img [src]="conversation.users[0]?.profilePicture">
+        <div class="presence-light" [ngClass]="getPresenceLightColor(conversation)"></div>
       </ion-avatar>
       <ion-label>
-        <h2> {{ conversationSvc.getConversationMembersFormatted(conversation.users) }}</h2>
-        <h3 class="fit-message">{{ conversation.displayMessage }}</h3>
+        <h2> {{ conversationSvc.getConversationMembersFormatted(conversation.users, userUid) }}</h2>
+        <h3 class="fit-message">{{ displayLastMessage(conversation) }}</h3>
       </ion-label>
     </ion-item>
   </ion-virtual-scroll>

@@ -21,7 +21,8 @@
         <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
           <img [src]="img">
         </ion-avatar>
-        <p>{{message.text}}</p>
+        <markdown [data]="message.text"></markdown>
+        <!-- <p>{{message.text}}</p> -->
       </div>
 
       <div *ngIf="isInterlocutorWritting" class="writting-status">

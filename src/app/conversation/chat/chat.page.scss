@@ -14,7 +14,7 @@
       overflow: auto;
       padding: 15px 10px;
       .message {
-        p {
+        markdown {
           // display: flex;
           color: #8a898b;
           font-size: 16px;
@@ -34,7 +34,7 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: flex-end;
-        p {
+        markdown {
           color: white;
           border-radius: 1.3em;
           background: #09f;
@@ -45,7 +45,7 @@
         flex-direction: column;
         justify-content: flex-end;
         align-items: flex-end;
-        p {
+        markdown {
           border-radius: 1.3em;
           text-align: justify;
         }

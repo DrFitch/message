@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { User } from 'src/core/models/user';
 
 declare var cordova: any;
@@ -22,7 +23,13 @@ export class AuthenticationService {
   userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init' };
   authstate: AngularFireAuth = null;
 
-  constructor(private router: Router, private afs: AngularFirestore, private afAuth: AngularFireAuth) {
+  constructor(
+    private router: Router,
+    private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private db: AngularFireDatabase
+  ) {
+
     this.user$ = new Observable<User>();
     this.subjectUser$ = new BehaviorSubject<User>(null);
 
@@ -36,6 +43,9 @@ export class AuthenticationService {
         }
       })
     );
+
+    this.updateOnUser().subscribe();
+    this.updateOnDisconnect().subscribe();
   }
 
   get loggedIn() {
@@ -84,5 +94,49 @@ export class AuthenticationService {
 
   logout() {
     this.user$ = of(null);
+  }
+
+  getPresence(uid: string) {
+    return this.db.object(`status/${uid}`).valueChanges();
+  }
+
+  async setPresence(status: string) {
+    // const user = await this.getUser();
+    // if (user) {
+    this.afs.doc(`users/IGyZdaotm2s87FpWAaVk`).update({
+      status,
+      timestamp: Date.now()
+    });
+    return this.db.object(`status/IGyZdaotm2s87FpWAaVk`).update({ status, timestamp: this.timestamp });
+    // }
+  }
+
+  get timestamp() {
+    return firebase.database.ServerValue.TIMESTAMP;
+  }
+
+  updateOnUser() {
+    const connection = this.db.object('.info/connected').valueChanges().pipe(
+      map(connected => connected ? 'online' : 'offline')
+    );
+
+    return this.afAuth.authState.pipe(
+      switchMap(user => true ? connection : of('offline')),
+      tap(status => this.setPresence(status))
+    );
+  }
+
+  updateOnDisconnect() {
+    return this.afAuth.authState.pipe(
+      tap(user => {
+        if (user) {
+          this.db.object(`status/${user.uid}`).query.ref.onDisconnect()
+            .update({
+              status: 'offline',
+              timestamp: this.timestamp
+            });
+        }
+      })
+    );
   }
 }
