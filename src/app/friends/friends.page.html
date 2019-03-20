@@ -7,7 +7,7 @@
   <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="filterContacts($event.target.value)"></ion-searchbar>
 
   <ion-list>
-    <ion-item *ngFor="let contact of filteredContacts" lines="none">
+    <ion-item *ngFor="let contact of macthingContact" lines="none">
       <ion-avatar slot="start">
         <ngx-avatar [name]="contact.displayName"></ngx-avatar>
       </ion-avatar>

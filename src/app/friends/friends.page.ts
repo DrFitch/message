@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { User } from 'src/core/models/user';
+import { FriendsSvcService } from '../shared/friends-svc.service';
 
 declare var navigator;
 declare var ContactFindOptions;
@@ -13,11 +16,18 @@ export class FriendsPage implements OnInit {
   contacts;
   searchTerms = '';
   filteredContacts: any;
+  usersList: User[];
+  macthingContact: any;
 
-  constructor() { }
+  constructor(private afs: AngularFirestore, private friendSvc: FriendsSvcService) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    this.friendSvc.getUserInfos().subscribe(user => {
+      this.usersList = user;
+      console.log('direct: ', this.usersList);
+      this.matchContactOnPhone();
+    });
   }
 
   onDeviceReady() {
@@ -30,6 +40,18 @@ export class FriendsPage implements OnInit {
     options.multiple = true;
     const fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
     navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError, options);
+  }
+
+  matchContactOnPhone() {
+    this.macthingContact = new Array();
+    this.filteredContacts.forEach(element => {
+      this.usersList.forEach(elementDB => {
+        if (element.phoneNumbers[0].value === elementDB.phoneNumber) {
+          this.macthingContact.push(element);
+          console.log('Mon tab : ', this.macthingContact);
+        }
+      });
+    });
   }
 
   onSuccess(contacts) {
