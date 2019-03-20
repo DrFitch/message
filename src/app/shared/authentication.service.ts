@@ -20,7 +20,7 @@ export class AuthenticationService {
   verificationID: string;
   user$: Observable<User>;
   subjectUser$: BehaviorSubject<User>;
-  userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init' };
+  userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init', status: null };
   authstate: AngularFireAuth = null;
 
   constructor(
@@ -36,7 +36,7 @@ export class AuthenticationService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          this.subjectUser$.next(user);
+          this.subjectUser$.next(new User(user));
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
@@ -85,7 +85,8 @@ export class AuthenticationService {
     const data: User = {
       uid: user.value.uid,
       phoneNumber: user.value.phoneNumber,
-      name: user.value.name
+      name: user.value.name,
+      status: null
     };
 
     return userRef.set(data, { merge: true });
