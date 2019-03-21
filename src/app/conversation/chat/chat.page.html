@@ -41,14 +41,25 @@
     </div>
     <div class="input-area">
       <form (submit)="sendMessage()" name="messageForm" #messageForm="ngForm">
-        <ion-input #inputMessage type="text" name="message" id="message" [(ngModel)]="message"
-          placeholder="Type a message here" (click)="emitUserTyping(); scrollToBottom()">
+        <expandable [expandWidth]="itemExpandWidth" [expanded]="isExpanded">
+          <div (click)="interactCollapside()" class="collapside-button">
+            <div *ngIf="isExpanded; else collapsideCode">
+              <ion-icon name="arrow-dropleft" style="font-size: 24px;"></ion-icon>
+            </div>
+            <ng-template #collapsideCode>
+              <ion-icon name="arrow-dropright" style="font-size: 24px;"></ion-icon>
+            </ng-template>
+          </div>
+        </expandable>
+        <ion-input #inputMessage class="input-message" type="text" name="message" id="message" [(ngModel)]="message"
+          placeholder="Type a message..." (click)="emitUserTyping(); scrollToBottom(); openCollapside()">
         </ion-input>
         <button (click)="inputMessage.setFocus()">
           <ion-icon [ngStyle]="{'color': message !== '' ? '#09f' : '' }" name="send" style="font-size: 24px;">
           </ion-icon>
         </button>
       </form>
+
     </div>
   </div>
 </div>

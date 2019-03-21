@@ -11,7 +11,7 @@ const routes: Routes = [
   // { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
   { path: 'verification', loadChildren: './verification/verification.module#VerificationPageModule' },
   // tslint:disable-next-line:max-line-length
-  { path: 'new-conversation', loadChildren: './conversation/new-conversation/new-conversation.module#NewConversationPageModule', canActivate: [AuthGuardGuard] }
+  { path: 'new-conversation', loadChildren: './conversation/new-conversation/new-conversation.module#NewConversationPageModule', canActivate: [AuthGuardGuard] },
 ];
 @NgModule({
   imports: [

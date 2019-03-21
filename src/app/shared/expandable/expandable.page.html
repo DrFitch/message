@@ -1,0 +1,11 @@
+<div #expandWrapper class='expand-wrapper' [class.collapsed]="!expanded">
+  <div class="collapside-content" [class.collapside-element]="!expanded">
+    <button class="upload-image-button">
+      <ion-icon name="images" style="font-size: 24px;"></ion-icon>
+    </button>
+    <button class="upload-image-button">
+      <ion-icon name="images" style="font-size: 24px;"></ion-icon>
+    </button>
+  </div>
+  <ng-content></ng-content>
+</div>

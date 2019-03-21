@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MenuController } from '@ionic/angular';
 import { orderBy } from 'lodash';
 import { MarkdownService } from 'ngx-markdown';
 import { Message } from 'src/core/models/message';
@@ -26,7 +27,15 @@ export class ChatPage implements OnInit {
   isLoading: boolean;
   userUid: string;
 
-  constructor(private route: ActivatedRoute, private conversationSvc: ConversationService, private markdownService: MarkdownService) { }
+  itemExpandWidth = 90;
+  isExpanded = true;
+
+  constructor(
+    private route: ActivatedRoute,
+    private conversationSvc: ConversationService,
+    private markdownService: MarkdownService,
+    private menu: MenuController
+  ) { }
 
   ngOnInit() {
     this.conversationId = this.route.snapshot.paramMap.get('uid');
@@ -48,16 +57,19 @@ export class ChatPage implements OnInit {
 
   sendMessage() {
     this.scrollToBottom();
-    this.conversationSvc.addMessages(this.conversationId, this.userUid, this.message).subscribe(() => {
-      this.conversationSvc.registerDisplayMessage(this.conversationId, this.markdownService.compile(this.message));
-      this.message = '';
-      this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
-    });
+    if (this.message !== '') {
+      this.conversationSvc.addMessages(this.conversationId, this.userUid, this.message).subscribe(() => {
+        this.conversationSvc.registerDisplayMessage(this.conversationId, this.markdownService.compile(this.message));
+        this.message = '';
+        this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
+      });
+    }
   }
 
   getConversationInterlocutors() {
     let result = '';
     if (this.members) {
+      console.log('this.members', this.members);
       this.members.forEach(interlocutor => {
         result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
       });
@@ -91,6 +103,19 @@ export class ChatPage implements OnInit {
       outgoing: this.userUid === senderId,
       grouped: endGroup
     };
+  }
+
+  openCustom() {
+    this.menu.enable(true, 'custom');
+    this.menu.open('custom');
+  }
+
+  openCollapside() {
+    this.isExpanded = true;
+  }
+
+  interactCollapside() {
+    this.isExpanded = !this.isExpanded;
   }
 
 }

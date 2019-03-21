@@ -1,0 +1,21 @@
+.expand-wrapper {
+  display: inline-flex;
+  transition: 0.2s linear;
+  margin-right: 10px !important;
+}
+
+.collapsed {
+  width: 20px !important;
+}
+
+.collapside-content {
+  display: inline-flex;
+}
+
+.collapside-element {
+  display: none;
+}
+
+button {
+  background-color: transparent !important;
+}
