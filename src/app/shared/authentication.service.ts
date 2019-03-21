@@ -48,10 +48,6 @@ export class AuthenticationService {
     this.updateOnDisconnect().subscribe();
   }
 
-  get loggedIn() {
-    return !!this.subjectUser$.value;
-  }
-
   loginWithPhoneNumber(phoneNumber: string) {
     const that = this;
     this.connecting = true;
@@ -95,6 +91,8 @@ export class AuthenticationService {
 
   logout() {
     this.user$ = of(null);
+    this.subjectUser$.next(null);
+    this.router.navigateByUrl('/login');
   }
 
   getPresence(uid: string) {

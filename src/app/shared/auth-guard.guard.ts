@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { User } from 'src/core/models/user';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({
@@ -9,23 +9,22 @@ import { AuthenticationService } from './authentication.service';
 })
 export class AuthGuardGuard implements CanActivate {
 
-  constructor(private authSvc: AuthenticationService, private route: Router) {
+  user: User;
+
+  constructor(private authSvc: AuthenticationService, private router: Router) {
 
   }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    this.authSvc.subjectUser$.pipe(
-      take(1),
-      map(user => !!user),
-      tap(loggedIn => {
-        if (!loggedIn) {
-          this.route.navigate(['login']);
-          console.log('Te faire encadré');
-        }
-      })
-    );
+    this.authSvc.subjectUser$.subscribe(res => {
+      this.user = res;
+    });
+    if (!this.user) {
+      this.router.navigateByUrl('/login');
+      return false;
+    }
     return true;
   }
 }

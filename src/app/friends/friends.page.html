@@ -4,16 +4,32 @@
     Friends
   </h1>
 
-  <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="filterContacts($event.target.value)"></ion-searchbar>
+  <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="filterContacts($event.target.value)" debounce="300"
+    [(ngModel)]="searchTerm"></ion-searchbar>
 
-  <ion-list>
-    <ion-item *ngFor="let contact of filteredContacts" lines="none">
+  <ion-list *ngIf="!searchTerm">
+    <ion-item *ngFor="let contact of macthingContact" lines="none">
       <ion-avatar slot="start">
         <ngx-avatar [name]="contact.displayName"></ngx-avatar>
       </ion-avatar>
       <ion-label>
         <h2>{{ contact.displayName }}</h2>
         <p *ngIf="contact.phoneNumbers; else noNumber"> {{ contact.phoneNumbers[0].value }} </p>
+        <ng-template #noNumber>
+          <p>No number</p>
+        </ng-template>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="searchTerm">
+    <ion-item *ngFor="let contact of searchedContact" lines="none">
+      <ion-avatar slot="start">
+        <ngx-avatar [name]="contact.name"></ngx-avatar>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ contact.name }}</h2>
+        <p *ngIf="contact.phoneNumber; else noNumber"> {{ contact.phoneNumber }} </p>
         <ng-template #noNumber>
           <p>No number</p>
         </ng-template>

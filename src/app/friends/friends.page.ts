@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { User } from 'src/core/models/user';
+import { FriendsSvcService } from '../shared/friends-svc.service';
 
 declare var navigator;
 declare var ContactFindOptions;
@@ -13,11 +16,18 @@ export class FriendsPage implements OnInit {
   contacts;
   searchTerms = '';
   filteredContacts: any;
+  usersList: User[];
+  macthingContact: any;
+  searchedContact: any;
 
-  constructor() { }
+  constructor(private afs: AngularFirestore, private friendSvc: FriendsSvcService) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    this.friendSvc.getUserInfos().subscribe(user => {
+      this.usersList = user;
+      this.matchContactOnPhone();
+    });
   }
 
   onDeviceReady() {
@@ -32,6 +42,17 @@ export class FriendsPage implements OnInit {
     navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError, options);
   }
 
+  matchContactOnPhone() {
+    this.macthingContact = new Array();
+    this.filteredContacts.forEach(element => {
+      this.usersList.forEach(elementDB => {
+        if (element.phoneNumbers[0].value === elementDB.phoneNumber) {
+          this.macthingContact.push(element);
+        }
+      });
+    });
+  }
+
   onSuccess(contacts) {
     this.contacts = contacts;
     this.filteredContacts = this.contacts;
@@ -42,7 +63,8 @@ export class FriendsPage implements OnInit {
   }
 
   filterContacts(searchTerm) {
-    this.filteredContacts = this.contacts.filter(item => item.displayName.toLowerCase().indexOf(searchTerm) !== -1);
+    console.log(searchTerm);
+    this.searchedContact = this.usersList.filter(x => x.name.match(searchTerm));
   }
 
 }
