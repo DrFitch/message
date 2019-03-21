@@ -26,8 +26,6 @@ export class FriendsPage implements OnInit {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     this.friendSvc.getUserInfos().subscribe(user => {
       this.usersList = user;
-      console.log('direct: ', this.usersList);
-      console.log('direct: ', this.filteredContacts);
       this.matchContactOnPhone();
     });
   }
@@ -50,7 +48,6 @@ export class FriendsPage implements OnInit {
       this.usersList.forEach(elementDB => {
         if (element.phoneNumbers[0].value === elementDB.phoneNumber) {
           this.macthingContact.push(element);
-          console.log('Mon tab : ', this.macthingContact);
         }
       });
     });
@@ -68,7 +65,6 @@ export class FriendsPage implements OnInit {
   filterContacts(searchTerm) {
     console.log(searchTerm);
     this.searchedContact = this.usersList.filter(x => x.name.match(searchTerm));
-    // this.filteredContacts = this.contacts.filter(item => item.displayName.toLowerCase().indexOf(searchTerm) !== -1);
   }
 
 }
