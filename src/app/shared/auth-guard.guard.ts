@@ -22,7 +22,6 @@ export class AuthGuardGuard implements CanActivate {
       this.user = res;
     });
     if (!this.user) {
-      console.log('Not in my car');
       this.router.navigateByUrl('/login');
       return false;
     }
