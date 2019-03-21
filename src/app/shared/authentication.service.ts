@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { User } from 'src/core/models/user';
 
 declare var cordova: any;
@@ -19,23 +20,32 @@ export class AuthenticationService {
   verificationID: string;
   user$: Observable<User>;
   subjectUser$: BehaviorSubject<User>;
-  userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init' };
+  userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init', status: null };
   authstate: AngularFireAuth = null;
 
-  constructor(private router: Router, private afs: AngularFirestore, private afAuth: AngularFireAuth) {
+  constructor(
+    private router: Router,
+    private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private db: AngularFireDatabase
+  ) {
+
     this.user$ = new Observable<User>();
     this.subjectUser$ = new BehaviorSubject<User>(null);
 
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          this.subjectUser$.next(user);
+          this.subjectUser$.next(new User(user));
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
       })
     );
+
+    this.updateOnUser().subscribe();
+    this.updateOnDisconnect().subscribe();
   }
 
   loginWithPhoneNumber(phoneNumber: string) {
@@ -71,7 +81,8 @@ export class AuthenticationService {
     const data: User = {
       uid: user.value.uid,
       phoneNumber: user.value.phoneNumber,
-      name: user.value.name
+      name: user.value.name,
+      status: null
     };
 
     return userRef.set(data, { merge: true });
@@ -82,5 +93,49 @@ export class AuthenticationService {
     this.user$ = of(null);
     this.subjectUser$.next(null);
     this.router.navigateByUrl('/login');
+  }
+
+  getPresence(uid: string) {
+    return this.db.object(`status/${uid}`).valueChanges();
+  }
+
+  async setPresence(status: string) {
+    // const user = await this.getUser();
+    // if (user) {
+    this.afs.doc(`users/IGyZdaotm2s87FpWAaVk`).update({
+      status,
+      timestamp: Date.now()
+    });
+    return this.db.object(`status/IGyZdaotm2s87FpWAaVk`).update({ status, timestamp: this.timestamp });
+    // }
+  }
+
+  get timestamp() {
+    return firebase.database.ServerValue.TIMESTAMP;
+  }
+
+  updateOnUser() {
+    const connection = this.db.object('.info/connected').valueChanges().pipe(
+      map(connected => connected ? 'online' : 'offline')
+    );
+
+    return this.afAuth.authState.pipe(
+      switchMap(user => true ? connection : of('offline')),
+      tap(status => this.setPresence(status))
+    );
+  }
+
+  updateOnDisconnect() {
+    return this.afAuth.authState.pipe(
+      tap(user => {
+        if (user) {
+          this.db.object(`status/${user.uid}`).query.ref.onDisconnect()
+            .update({
+              status: 'offline',
+              timestamp: this.timestamp
+            });
+        }
+      })
+    );
   }
 }

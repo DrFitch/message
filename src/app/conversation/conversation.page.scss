@@ -25,3 +25,26 @@
   text-overflow: ellipsis;
   width: 95%;
 }
+
+.presence-light {
+  width: 12px;
+  height: 12px;
+  background-color: grey;
+  position: absolute;
+  left: 45px;
+  top: 45px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.online {
+  background-color: #45dd45 !important;
+}
+
+.away {
+  background-color: orange !important;
+}
+
+.offline {
+  background-color: red !important;
+}

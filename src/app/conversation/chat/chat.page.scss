@@ -14,7 +14,7 @@
       overflow: auto;
       padding: 15px 10px;
       .message {
-        p {
+        markdown {
           // display: flex;
           color: #8a898b;
           font-size: 16px;
@@ -34,7 +34,7 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: flex-end;
-        p {
+        markdown {
           color: white;
           border-radius: 1.3em;
           background: #09f;
@@ -45,7 +45,7 @@
         flex-direction: column;
         justify-content: flex-end;
         align-items: flex-end;
-        p {
+        markdown {
           border-radius: 1.3em;
           text-align: justify;
         }
@@ -78,12 +78,16 @@
     ion-input {
       width: 82%;
       border: none;
-      padding: 5px 10px;
+      padding-left: 5px !important;
       color: #8a898b;
-      font-size: 14px;
-      font-weight: bold;
-      font-family: "Titillium Web", sans-serif;
       background: inherit;
+      font-size: 16px;
+      padding: 8px 14px 8px 14px;
+      font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.28;
+      text-rendering: optimizeLegibility;
+      font-weight: 400;
       &:focus {
         outline: none;
       }
@@ -197,6 +201,7 @@ body {
 .writting-status {
   margin: 15px 0 0 0 !important;
   display: flex;
+  padding-bottom: 15px;
 }
 
 #loader {

@@ -3,9 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
 import { LoginPage } from './login.page';
-
-
 
 const routes: Routes = [
   {
@@ -19,7 +18,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    InternationalPhoneNumberModule
   ],
   declarations: [LoginPage]
 })

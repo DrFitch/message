@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { orderBy } from 'lodash';
+import { MarkdownService } from 'ngx-markdown';
 import { Message } from 'src/core/models/message';
 import { ConversationService } from '../conversation.service';
 
@@ -25,7 +26,7 @@ export class ChatPage implements OnInit {
   isLoading: boolean;
   userUid: string;
 
-  constructor(private route: ActivatedRoute, private conversationSvc: ConversationService) { }
+  constructor(private route: ActivatedRoute, private conversationSvc: ConversationService, private markdownService: MarkdownService) { }
 
   ngOnInit() {
     this.conversationId = this.route.snapshot.paramMap.get('uid');
@@ -33,6 +34,7 @@ export class ChatPage implements OnInit {
       this.loadMessages();
       this.userUid = 'cw1jmSYNk3Yh4wR8C0k1anvNFet2';
     }
+
   }
 
   loadMessages(): any {
@@ -40,13 +42,14 @@ export class ChatPage implements OnInit {
     this.conversationSvc.getMessages(this.conversationId).subscribe(messages => {
       this.messages = orderBy(messages, ['createdAt'], ['asc']);
       this.isLoading = false;
+      this.scrollToBottom();
     });
   }
 
   sendMessage() {
     this.scrollToBottom();
     this.conversationSvc.addMessages(this.conversationId, this.userUid, this.message).subscribe(() => {
-      this.conversationSvc.registerDisplayMessage(this.conversationId, this.message);
+      this.conversationSvc.registerDisplayMessage(this.conversationId, this.markdownService.compile(this.message));
       this.message = '';
       this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
     });

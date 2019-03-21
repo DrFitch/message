@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Conversation } from 'src/core/models/conversation';
 import { User } from 'src/core/models/user';
+import { AuthenticationService } from '../shared/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConversationService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore, private authSvc: AuthenticationService) { }
 
   getUserInfos(userId: string): Observable<User> {
     return this.afs.collection<User>('users').doc(userId).get().pipe(
@@ -40,9 +41,12 @@ export class ConversationService {
           const conversation = c.payload.doc.data() as Conversation;
           conversation.id = c.payload.doc.id;
           conversation.users = [];
-          conversation.memberIds.map(member => {
-            this.getUserById(member).subscribe(user => {
-              conversation.users.push(new User(user));
+          conversation.memberIds.forEach(id => {
+            this.getUserById(id).subscribe(user => {
+              this.authSvc.getPresence(user.uid).pipe(take(1)).subscribe(status => {
+                user.status = status;
+                conversation.users.push(new User(user));
+              });
             });
           });
           result.push(conversation);
@@ -65,8 +69,11 @@ export class ConversationService {
     );
   }
 
-  getConversationMembersFormatted(members) {
+  getConversationMembersFormatted(members: User[], connectedUserId = null) {
     let result = '';
+    if (members.length === 2) {
+      members = members.filter(x => x.uid !== connectedUserId);
+    }
     members.forEach((member, index) => {
       result += member.name + (index === members.length - 1 ? '' : ', ');
     });

@@ -21,7 +21,8 @@
         <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
           <img [src]="img">
         </ion-avatar>
-        <p>{{message.text}}</p>
+        <markdown [data]="message.text"></markdown>
+        <!-- <p>{{message.text}}</p> -->
       </div>
 
       <div *ngIf="isInterlocutorWritting" class="writting-status">
@@ -44,7 +45,8 @@
           placeholder="Type a message here" (click)="emitUserTyping(); scrollToBottom()">
         </ion-input>
         <button (click)="inputMessage.setFocus()">
-          <ion-icon name="send"></ion-icon>
+          <ion-icon [ngStyle]="{'color': message !== '' ? '#09f' : '' }" name="send" style="font-size: 24px;">
+          </ion-icon>
         </button>
       </form>
     </div>
