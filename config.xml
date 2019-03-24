@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.41:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -39,6 +39,7 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <resource-file src="google-services.json" target="app/google-services.json" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -88,5 +89,6 @@
     <plugin name="cordova-plugin-contacts" spec="3.0.1" />
     <plugin name="cordova-plugin-firebase" spec="git+https://github.com/jestcastro/cordova-plugin-firebase.git" />
     <allow-navigation href="http://192.168.1.12:8100" sessionid="2adae2ed" />
+    <allow-navigation href="http://192.168.0.41:8100" sessionid="6b6efffd" />
     <engine name="android" spec="7.1.4" />
 </widget>
