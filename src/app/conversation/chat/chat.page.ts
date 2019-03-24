@@ -27,7 +27,7 @@ export class ChatPage implements OnInit {
   isLoading: boolean;
   userUid: string;
 
-  itemExpandWidth = 90;
+  itemExpandWidth = 70;
   isExpanded = true;
 
   constructor(
@@ -43,6 +43,9 @@ export class ChatPage implements OnInit {
       this.loadMessages();
       this.userUid = 'cw1jmSYNk3Yh4wR8C0k1anvNFet2';
     }
+
+
+    document.querySelector('ion-tab-bar').style.display = 'none';
 
   }
 
@@ -114,8 +117,8 @@ export class ChatPage implements OnInit {
     this.isExpanded = true;
   }
 
-  interactCollapside() {
-    this.isExpanded = !this.isExpanded;
+  closeCollapside() {
+    this.isExpanded = false;
   }
 
 }
