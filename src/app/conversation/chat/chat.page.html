@@ -16,7 +16,7 @@
 
 <div *ngIf="!isLoading; else loader" class="main">
   <div class="chat-box">
-    <div #chat class="message-area">
+    <div #chat class="message-area" (click)="openCollapside()">
       <div class="message" *ngFor="let message of messages" [ngClass]="getClasses(message.senderId)">
         <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
           <img [src]="img">
