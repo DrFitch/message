@@ -34,7 +34,7 @@ export class ChatPage implements OnInit {
     private route: ActivatedRoute,
     private conversationSvc: ConversationService,
     private markdownService: MarkdownService,
-    private menu: MenuController
+    private menu: MenuController,
   ) { }
 
   ngOnInit() {
@@ -72,7 +72,7 @@ export class ChatPage implements OnInit {
   getConversationInterlocutors() {
     let result = '';
     if (this.members) {
-      console.log('this.members', this.members);
+      // console.log('this.members', this.members);
       this.members.forEach(interlocutor => {
         result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
       });
@@ -120,5 +120,6 @@ export class ChatPage implements OnInit {
   closeCollapside() {
     this.isExpanded = false;
   }
+
 
 }

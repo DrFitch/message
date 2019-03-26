@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { MarkdownModule } from 'ngx-markdown';
 import { ExpandableComponent } from 'src/app/shared/expandable/expandable.page';
 import { ChatPage } from './chat.page';
+import { ExpandableModule } from 'src/app/shared/expandable/expandable.module';
 
 const routes: Routes = [
   {
@@ -21,14 +22,11 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    MarkdownModule.forChild()
+    MarkdownModule.forChild(),
+    ExpandableModule
   ],
   declarations: [
-    ChatPage,
-    ExpandableComponent
-  ],
-  entryComponents: [
-    ExpandableComponent
+    ChatPage
   ]
 })
 export class ChatPageModule { }

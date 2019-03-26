@@ -7,6 +7,7 @@ import { AvatarModule } from 'ngx-avatar';
 import { ConversationPage } from './conversation.page';
 import { ConversationService } from './conversation.service';
 import { NewConversationPage } from './new-conversation/new-conversation.page';
+import { ExpandableModule } from '../shared/expandable/expandable.module';
 
 const routes: Routes = [
   {
@@ -25,7 +26,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    AvatarModule
+    AvatarModule,
+    ExpandableModule
   ],
   declarations: [
     ConversationPage,

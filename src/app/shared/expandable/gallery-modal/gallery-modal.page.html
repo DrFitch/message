@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>gallery-modal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <button ion-item *ngFor="let libraryItem of value" (click)="itemTapped($event, libraryItem)">
+    <img [src]="libraryItem.thumbnailURL | cdvphotolibrary">
+  </button>
+
+</ion-content>
