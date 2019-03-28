@@ -21,8 +21,10 @@
         <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
           <img [src]="img">
         </ion-avatar>
-        <markdown [data]="message.text"></markdown>
-        <!-- <p>{{message.text}}</p> -->
+          <markdown *ngIf="message.text; else displayPicture" [data]="message.text"></markdown>
+        <ng-template #displayPicture>
+          <img class="message-picture" [src]="message.imageUrl">
+        </ng-template>
       </div>
 
       <div *ngIf="isInterlocutorWritting" class="writting-status">
@@ -41,7 +43,7 @@
     </div>
     <div class="input-area">
       <form (submit)="sendMessage()" name="messageForm" #messageForm="ngForm">
-        <expandable [expandWidth]="itemExpandWidth" [expanded]="isExpanded">
+        <expandable [expandWidth]="itemExpandWidth" [expanded]="isExpanded" (pictureUploaded)="sendPictures($event)">
           <div (click)="openCollapside()" class="collapside-button">
             <div *ngIf="!isExpanded">
               <ion-icon name="arrow-dropright" style="font-size: 24px;"></ion-icon>

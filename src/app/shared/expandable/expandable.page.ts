@@ -1,17 +1,21 @@
-import { AfterViewInit, Component, ElementRef, Input, Renderer, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, Renderer, ViewChild, Output, EventEmitter } from '@angular/core';
 import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
 import { ModalController } from '@ionic/angular';
 import { GalleryModalPage } from './gallery-modal/gallery-modal.page';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'expandable',
   templateUrl: './expandable.page.html',
   styleUrls: ['./expandable.page.scss'],
-  providers: [PhotoLibrary],
+  providers: [AngularFireStorage],
   entryComponents: [GalleryModalPage]
 })
 
 export class ExpandableComponent implements AfterViewInit {
+
+  @Output() pictureUploaded: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('expandWrapper', { read: ElementRef }) expandWrapper;
   // tslint:disable-next-line:no-input-rename
@@ -21,44 +25,48 @@ export class ExpandableComponent implements AfterViewInit {
 
   library = [];
 
-  constructor(public renderer: Renderer, private photoLibrary: PhotoLibrary, private modalController: ModalController) { }
+  constructor(public renderer: Renderer, private modalController: ModalController, private storage: AngularFireStorage) { }
 
   ngAfterViewInit() {
     this.renderer.setElementStyle(this.expandWrapper.nativeElement, 'width', this.expandWidth + 'px');
   }
 
   async openLibrary() {
-    this.photoLibrary.requestAuthorization().then(() => {
-      this.photoLibrary.getLibrary().subscribe({
-        next: async (result) => {
-          const library = result['library'];
-          this.library = library;
-
-          const modal = await this.modalController.create({
-            component: GalleryModalPage,
-            componentProps: { value: this.library }
-          });
-          return await modal.present();
-
-          library.forEach(function (libraryItem) {
-            // console.log(libraryItem.id);          // ID of the photo
-            // console.log(libraryItem.photoURL);    // Cross-platform access to photo
-            // console.log(libraryItem.thumbnailURL); // Cross-platform access to thumbnail
-            // console.log(libraryItem.fileName);
-            // console.log(libraryItem.width);
-            // console.log(libraryItem.height);
-            // console.log(libraryItem.creationDate);
-            // console.log(libraryItem.latitude);
-            // console.log(libraryItem.longitude);
-            // console.log(libraryItem.albumIds);    // array of ids of appropriate AlbumItem, only of includeAlbumsData was used
-          });
-        },
-        error: err => { console.log('could not get photos'); },
-        complete: () => { console.log('done getting photos'); }
-      });
-    })
-      .catch(err => console.log('permissions weren\'t granted'));
+    const modal = await this.modalController.create({
+      component: GalleryModalPage,
+    });
+    await modal.present();
+    const test = await modal.onDidDismiss();
+    console.log('test', test);
+    this.uploadFile(test.data[0]);
   }
 
+  uploadFile(picture) {
+    // const file = event.target.files[0];
+    const filePath = `picture-${this.newGuid()}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, picture.imgBlob);
+    // this.uploadPercent = task.percentageChanges();
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        fileRef.getDownloadURL().subscribe(result => {
+          // this.user.photoURL = result;
+          this.pictureUploaded.next(result);
+          console.log('result', result);
+
+          // this.isUploading = false;
+          // this.auth.updateUserPhoto(user, this.test);
+        });
+      })).subscribe(() => {
+      });
+  }
+
+  newGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      // tslint:disable-next-line:no-bitwise
+      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
 
 }

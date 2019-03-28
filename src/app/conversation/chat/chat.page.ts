@@ -121,5 +121,15 @@ export class ChatPage implements OnInit {
     this.isExpanded = false;
   }
 
+  sendPictures(e) {
+    console.log('sendPictures e', e);
+    this.scrollToBottom();
+      this.conversationSvc.sendPicture(this.conversationId, this.userUid, e).subscribe(() => {
+        this.conversationSvc.registerDisplayMessage(this.conversationId, this.markdownService.compile(this.message));
+        this.message = '';
+        this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
+      });
+  }
+
 
 }
