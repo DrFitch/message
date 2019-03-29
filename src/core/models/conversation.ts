@@ -8,6 +8,7 @@ export class Conversation {
     displayMessage: string;
     users: User[];
     status: any;
+    typingUsers: [];
 
     constructor(data: any) {
         for (const key in data) {

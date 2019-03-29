@@ -20,14 +20,17 @@
   </div>
 
   <ion-list>
-    <ion-item *ngFor="let contact of friends" lines="none">
-      <ion-checkbox slot="start" mode="ios" [(ngModel)]="contact.isSelected"></ion-checkbox>
-      <ion-avatar slot="start">
-        <ngx-avatar [name]="contact.displayName"></ngx-avatar>
+    <ion-item *ngFor="let friend of friends" lines="none">
+      <ion-checkbox slot="start" mode="ios" [(ngModel)]="friend.isSelected"></ion-checkbox>
+      <ion-avatar *ngIf="friend.profilePicture; else ngxAvatar" slot="start">
+        <img [src]="friend.profilePicture">
       </ion-avatar>
+      <ng-template #ngxAvatar>
+        <ngx-avatar [name]="friend.name"></ngx-avatar>
+      </ng-template>
       <ion-label>
-        <h2>{{ contact.displayName }}</h2>
-        <p *ngIf="contact.phoneNumbers; else noNumber"> {{ contact.phoneNumbers[0].value }} </p>
+        <h2>{{ friend.name }}</h2>
+        <p *ngIf="friend.phoneNumber; else noNumber"> {{ friend.phoneNumber }} </p>
         <ng-template #noNumber>
           <p>No number</p>
         </ng-template>

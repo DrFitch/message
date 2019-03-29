@@ -5,6 +5,7 @@ export class User {
     public phoneNumber: string;
     public status: any;
     public friendList?: string[];
+    public profilePicture: string;
 
     constructor(data: any) {
         for (const key in data) {

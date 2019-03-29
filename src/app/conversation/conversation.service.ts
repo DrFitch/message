@@ -34,10 +34,8 @@ export class ConversationService {
   }
 
   getConversationsForUser(uid: string): Observable<Conversation[]> {
-    console.log('userId', uid);
     return this.afs.collection('conversations', ref => ref.where('members', 'array-contains', uid)).snapshotChanges().pipe(
       map(conversations => {
-        console.log('conversations', conversations);
         const result: Conversation[] = [];
         conversations.map(c => {
           const conversation = c.payload.doc.data() as Conversation;
@@ -88,6 +86,10 @@ export class ConversationService {
     );
   }
 
+  getConversation(conversationId): Observable<any> {
+    return this.afs.doc(`conversations/${conversationId}`).valueChanges();
+  }
+
   getMessages(conversationId): Observable<any> {
     return this.afs.collection(`conversations/${conversationId}/messages`).valueChanges().pipe(
       map(messages => messages)
@@ -98,7 +100,7 @@ export class ConversationService {
     const typersArray = [];
     typersArray.push(userId);
     this.afs.collection(`conversations`).doc(conversationId).set({
-      isTyping: typersArray
+      typingUsers: typersArray
     }, { merge: true });
   }
 
@@ -124,23 +126,18 @@ export class ConversationService {
     }, { merge: true });
   }
 
-  unsetUserIsTyping(conversationId, userId: string) {
-
+  unsetUserTyping(conversationId, userId: string) {
     let typersArray = [];
-
     this.afs.collection(`conversations`).doc(conversationId).valueChanges().pipe(
-      map(conversation => {
-        typersArray = conversation['isTyping'];
+      map((conversation: Conversation) => {
+        typersArray = conversation.typingUsers;
         this.afs.collection(`conversations`).doc(conversationId).update({
-          isTyping: typersArray.filter(typer => typer.id !== userId)
+          typingUsers: typersArray.filter(typer => typer.id !== userId)
         });
       })
     );
-
-    console.log('isTyping', typersArray);
-
     this.afs.collection(`conversations`).doc(conversationId).update({
-      isTyping: typersArray.filter(typer => typer.id !== userId)
+      typingUsers: typersArray.filter(typer => typer.id !== userId)
     });
   }
 }

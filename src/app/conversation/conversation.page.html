@@ -11,17 +11,26 @@
     </ion-button>
   </div>
 
-  <ion-virtual-scroll *ngIf="conversations" [items]="conversations">
-    <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
-      <ion-avatar slot="start">
-        <img [src]="conversation.users[0]?.profilePicture">
-        <div class="presence-light" [ngClass]="getPresenceLightColor(conversation)"></div>
-      </ion-avatar>
-      <ion-label>
-        <h2> {{ conversationSvc.getConversationMembersFormatted(conversation.users, userUid) }}</h2>
-        <h3 class="fit-message">{{ displayLastMessage(conversation) }}</h3>
-      </ion-label>
-    </ion-item>
-  </ion-virtual-scroll>
+  <div *ngIf="!isLoading; else loader">
+    <ion-virtual-scroll *ngIf="conversations; else noConversations" [items]="conversations">
+      <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
+        <ion-avatar slot="start">
+          <img [src]="conversation.users[0]?.profilePicture">
+          <div class="presence-light" [ngClass]="getPresenceLightColor(conversation)"></div>
+        </ion-avatar>
+        <ion-label>
+          <h2> {{ conversationSvc.getConversationMembersFormatted(conversation.users, userUid) }}</h2>
+          <h3 class="fit-message">{{ displayLastMessage(conversation) }}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-virtual-scroll>
+    <ng-template #noConversations>
+      <p class="no-conversations">Press ⊕ to start a new conversation ! </p>
+    </ng-template>
+  </div>
+
+  <ng-template #loader>
+    <ion-spinner id="loader" name="crescent"></ion-spinner>
+  </ng-template>
 
 </ion-content>
