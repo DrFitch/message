@@ -10,15 +10,16 @@
   <ion-list *ngIf="!searchTerm">
     <ion-item *ngFor="let contact of macthingContact" lines="none">
       <ion-avatar slot="start">
-        <ngx-avatar [name]="contact.displayName"></ngx-avatar>
+        <ngx-avatar [name]="contact.name"></ngx-avatar>
       </ion-avatar>
       <ion-label>
-        <h2>{{ contact.displayName }}</h2>
-        <p *ngIf="contact.phoneNumbers; else noNumber"> {{ contact.phoneNumbers[0].value }} </p>
+        <h2>{{ contact.name }}</h2>
+        <p *ngIf="contact.phoneNumber; else noNumber"> {{ contact.phoneNumber[0].value }} </p>
         <ng-template #noNumber>
           <p>No number</p>
         </ng-template>
       </ion-label>
+      <ion-icon *ngIf="isFriend(contact.uid)" name="close" (click)="removeFriend(contact.uid)"></ion-icon>
     </ion-item>
   </ion-list>
 
@@ -29,12 +30,21 @@
       </ion-avatar>
       <ion-label>
         <h2>{{ contact.name }}</h2>
-        <p *ngIf="contact.phoneNumber; else noNumber"> {{ contact.phoneNumber }} </p>
+        <p *ngIf="contact.phoneNumber; else noNumber"> {{ contact.phoneNumber[0].value }} </p>
         <ng-template #noNumber>
           <p>No number</p>
         </ng-template>
       </ion-label>
+      <ion-icon *ngIf="!isFriend(contact.uid)" name="person-add" (click)="addFriend(contact.uid)"></ion-icon>
     </ion-item>
   </ion-list>
+  <ion-card *ngIf="(!searchTerm) && (!macthingContact) && (!haveFriend)">
+    <ion-img src='http://m.memegen.com/9h3nz0.jpg'></ion-img>
+
+    <ion-card-content>
+      Aucun de tes contacts n'utilise l'application, pour trouver un amis tape son nom dans la barre de recherche puis
+      ajoute le.
+    </ion-card-content>
+  </ion-card>
 
 </ion-content>

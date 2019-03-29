@@ -4,6 +4,8 @@ export class User {
     name?: string;
     phoneNumber?: string;
     status: any;
+    friendList?: string[];
+
 
     constructor(data: any) {
         for (const key in data) {
