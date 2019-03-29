@@ -22,19 +22,21 @@ export class ConversationPage implements OnInit {
 
   conversations: Conversation[] = [];
 
-  constructor(private router: Router,
-    private route: ActivatedRoute,
+  constructor(
+    private router: Router,
     private authSvc: AuthenticationService,
-    public conversationSvc: ConversationService
-  ) { }
+    public conversationSvc: ConversationService) { }
 
   ngOnInit() {
-    // console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
     this.authSvc.user$.subscribe(res => {
       this.userObj = res;
     });
-    this.userUid = 'IGyZdaotm2s87FpWAaVk';
-    this.loadConversations();
+
+    this.authSvc.user$.subscribe(result => {
+      console.log('result', result);
+      this.userUid = result.uid;
+      this.loadConversations();
+    });
   }
 
   loadConversations() {

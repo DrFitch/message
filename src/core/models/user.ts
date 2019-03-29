@@ -1,10 +1,9 @@
 export class User {
 
-    uid: string;
-    name?: string;
-    phoneNumber?: string;
-    status: any;
-    friendList?: string[];
+    public uid: string;
+    public name?: string;
+    public phoneNumber: string;
+    public status: any;
 
 
     constructor(data: any) {
