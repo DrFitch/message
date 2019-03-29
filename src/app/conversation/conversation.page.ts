@@ -15,30 +15,27 @@ declare var cordova: any;
 
 export class ConversationPage implements OnInit {
 
-  userObj: User;
+  user: User;
   userUid: string;
 
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
 
   conversations: Conversation[] = [];
 
-  constructor(private router: Router,
-    private route: ActivatedRoute,
+  constructor(
+    private router: Router,
     private authSvc: AuthenticationService,
-    public conversationSvc: ConversationService
-  ) { }
+    public conversationSvc: ConversationService) { }
 
   ngOnInit() {
-    // console.log('snapshot.paramMap.get("uid")', this.route.snapshot.paramMap.get('uid'));
-    this.authSvc.user$.subscribe(res => {
-      this.userObj = res;
+    this.authSvc.user$.subscribe(user => {
+      this.user = user;
+      this.loadConversations();
     });
-    this.userUid = 'IGyZdaotm2s87FpWAaVk';
-    this.loadConversations();
   }
 
   loadConversations() {
-    this.conversationSvc.getConversationsForUser(this.userUid).subscribe(conversations => {
+    this.conversationSvc.getConversationsForUser(this.user.uid).subscribe(conversations => {
       this.conversations = conversations;
       console.log('this.conversation', conversations);
     });

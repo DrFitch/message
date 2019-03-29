@@ -18,11 +18,11 @@ export class VerificationPage implements OnInit {
   }
 
   logOnVerifiation() {
-    if (this.authSvc.verificationID) {
-      this.authSvc.verifSmsCode(this.authSvc.verificationID, this.smsCode, this.firstName);
-    } else {
-      console.log('Nope');
-    }
+    // if (this.authSvc.verificationID) {
+    //   this.authSvc.verifSmsCode(this.authSvc.verificationID, this.smsCode, this.firstName);
+    // } else {
+    //   console.log('Nope');
+    // }
 
   }
 
