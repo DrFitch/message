@@ -20,7 +20,7 @@
   </div>
 
   <ion-list>
-    <ion-item *ngFor="let contact of filteredContacts" lines="none">
+    <ion-item *ngFor="let contact of friends" lines="none">
       <ion-checkbox slot="start" mode="ios" [(ngModel)]="contact.isSelected"></ion-checkbox>
       <ion-avatar slot="start">
         <ngx-avatar [name]="contact.displayName"></ngx-avatar>

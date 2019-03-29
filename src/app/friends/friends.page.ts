@@ -19,7 +19,7 @@ export class FriendsPage implements OnInit {
   searchTerm = '';
   filteredContacts: any;
   firestoreUsers: User[];
-  matchingContacts: any;
+  matchingContacts = [];
   searchedContact: any;
   myUser: User;
   useruid: string;
@@ -29,13 +29,11 @@ export class FriendsPage implements OnInit {
   constructor(private friendSvc: FriendsSvcService, private authSvc: AuthenticationService) { }
 
   ngOnInit() {
-    document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    this.friendSvc.getUserList().subscribe(users => {
-      this.firestoreUsers = users;
-    });
+
     this.authSvc.user$.subscribe(user => {
       this.useruid = user.uid;
       this.friendSvc.getUserInfos(this.useruid).subscribe(userInfo => {
+        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         this.myUser = userInfo;
       });
     });
@@ -54,41 +52,28 @@ export class FriendsPage implements OnInit {
   }
 
   matchContactOnPhone() {
-    this.matchingContacts = [];
+    // this.matchingContacts = [];
     this.filteredContacts = this.contacts;
-    this.filteredContacts.forEach(contact => {
-      if (contact.phoneNumbers) {
-        const phoneNumber = contact.phoneNumbers[0].value.replace(/\s/g, '');
-        const user = this.firestoreUsers.find(x => x.phoneNumber === phoneNumber);
-        if (user) {
-          this.matchingContacts.push(user);
+    if (this.firestoreUsers) {
+      this.filteredContacts.forEach(contact => {
+        if (contact.phoneNumbers) {
+          const phoneNumber = contact.phoneNumbers[0].value.replace(/\s/g, '');
+          const user = this.firestoreUsers.find(x => x.phoneNumber === phoneNumber);
+          if (user) {
+            this.matchingContacts.push(user);
+            console.log('matchingContacts : ', this.matchingContacts);
+          }
         }
-      }
-      console.log('this.match', this.matchingContacts);
-    });
+      });
+    }
 
-
-
-
-
-
-
-
-
-    // this.filteredContacts.forEach(element => {
-    //   this.firestoreUsers.forEach(elementDB => {
-    //     if (element.phoneNumbers[0].value === elementDB.phoneNumber) {
-    //       this.matchingContacts.push(elementDB);
-    //     }
-    //   });
-    // });
-    // if (this.myUser) {
-    //   this.myUser.friendList.forEach(friendUID => {
-    //     this.friendSvc.getUserInfos(friendUID).subscribe(friend => {
-    //       this.matchingContacts.push(friend);
-    //     });
-    //   });
-    // }
+    if (this.myUser.friendList) {
+      this.myUser.friendList.forEach(friendUID => {
+        this.friendSvc.getUserInfos(friendUID).subscribe(friend => {
+          this.matchingContacts.push(friend);
+        });
+      });
+    }
   }
 
   addFriend(userFriendUID: string) {
@@ -107,8 +92,9 @@ export class FriendsPage implements OnInit {
     this.matchContactOnPhone();
   }
 
-  isFriend(friendUID: string) {
-    if (this.myUser.friendList.indexOf(friendUID) > -1) {
+  isFriend(uid: string) {
+    if (!this.myUser.friendList) { return false; }
+    if (this.myUser.friendList.indexOf(uid) > -1) {
       return true;
     }
     return false;
@@ -125,7 +111,10 @@ export class FriendsPage implements OnInit {
 
   onSuccess(contacts) {
     this.contacts = contacts;
-    this.matchContactOnPhone();
+    this.friendSvc.getUserList().subscribe(users => {
+      this.firestoreUsers = users;
+      this.matchContactOnPhone();
+    });
   }
 
   onError(contactError) {

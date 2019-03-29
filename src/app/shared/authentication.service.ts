@@ -7,6 +7,7 @@ import * as firebase from 'firebase';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { User } from 'src/core/models/user';
+import { Platform } from '@ionic/angular';
 
 declare var cordova: any;
 
@@ -15,66 +16,59 @@ declare var cordova: any;
 })
 
 export class AuthenticationService {
-  phoneNumber: string;
+
   connecting = false;
-  verificationID: string;
   user$ = new BehaviorSubject<User>(null);
 
-  userObj: User = { uid: 'init', name: 'init', phoneNumber: 'init', status: null };
-  authstate: AngularFireAuth = null;
-
   constructor(
+    platform: Platform,
     private router: Router,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     private db: AngularFireDatabase) {
 
-    cordova.plugins.firebase.auth.onAuthStateChanged(userInfo => {
-      if (userInfo && userInfo.uid) {
-        this.afs.firestore.doc(`/users/${userInfo.uid}`).get()
-          .then(docSnapshot => {
-            if (docSnapshot.exists) {
-              this.user$.next(new User(docSnapshot.data()));
-            } else {
-              this.afs.doc(`users/${userInfo.uid}`).set({
-                name: 'Test',
-                phoneNumber: userInfo.phoneNumber,
-                uid: userInfo.uid
-              }).then(result => {
-                console.log('result creation', result);
-                this.user$.next(new User(result));
-              });
-            }
-            this.router.navigateByUrl(`/tabs/conversations`);
-          });
-      } else {
-        // user was signed out
-      }
-    }).bind(this);
-
+    platform.ready().then(() => {
+      cordova.plugins.firebase.auth.onAuthStateChanged(userInfo => {
+        if (userInfo && userInfo.uid) {
+          this.afs.firestore.doc(`/users/${userInfo.uid}`).get()
+            .then(docSnapshot => {
+              if (docSnapshot.exists) {
+                this.user$.next(new User(docSnapshot.data()));
+              } else {
+                this.afs.doc(`users/${userInfo.uid}`).set({
+                  name: 'Test',
+                  phoneNumber: userInfo.phoneNumber,
+                  uid: userInfo.uid,
+                  friendList: []
+                }).then(result => {
+                  console.log('result creation', result);
+                  this.user$.next(new User(result));
+                });
+              }
+              this.router.navigateByUrl(`/tabs/conversations`);
+            });
+        } else {
+          // user was signed out
+        }
+      }).bind(this);
+    });
     this.updateOnUser().subscribe();
     this.updateOnDisconnect().subscribe();
   }
 
   loginWithPhoneNumber(phoneNumber: string) {
     this.connecting = true;
-    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 40000);
+    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000);
   }
 
   updateUserData(user) {
-    // Sets user data to firestore on login
-
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.value.uid}`);
-
-    const data: User = {
+    return userRef.set({
       uid: user.value.uid,
       phoneNumber: user.value.phoneNumber,
       name: user.value.name,
-      status: null
-    };
-
-    return userRef.set(data, { merge: true });
-
+      status: null,
+    }, { merge: true });
   }
 
   getUser(uid: string): Observable<any> {

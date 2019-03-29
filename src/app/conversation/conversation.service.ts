@@ -33,15 +33,17 @@ export class ConversationService {
     );
   }
 
-  getConversationsForUser(userId: string): Observable<Conversation[]> {
-    return this.afs.collection('conversations', ref => ref.where('memberIds', 'array-contains', userId)).snapshotChanges().pipe(
+  getConversationsForUser(uid: string): Observable<Conversation[]> {
+    console.log('userId', uid);
+    return this.afs.collection('conversations', ref => ref.where('members', 'array-contains', uid)).snapshotChanges().pipe(
       map(conversations => {
+        console.log('conversations', conversations);
         const result: Conversation[] = [];
         conversations.map(c => {
           const conversation = c.payload.doc.data() as Conversation;
           conversation.id = c.payload.doc.id;
           conversation.users = [];
-          conversation.memberIds.forEach(id => {
+          conversation.members.forEach(id => {
             this.getUserById(id).subscribe(user => {
               this.authSvc.getPresence(user.uid).pipe(take(1)).subscribe(status => {
                 user.status = status;

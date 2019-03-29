@@ -15,7 +15,7 @@ declare var cordova: any;
 
 export class ConversationPage implements OnInit {
 
-  userObj: User;
+  user: User;
   userUid: string;
 
   img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
@@ -28,19 +28,14 @@ export class ConversationPage implements OnInit {
     public conversationSvc: ConversationService) { }
 
   ngOnInit() {
-    this.authSvc.user$.subscribe(res => {
-      this.userObj = res;
-    });
-
-    this.authSvc.user$.subscribe(result => {
-      console.log('result', result);
-      this.userUid = result.uid;
+    this.authSvc.user$.subscribe(user => {
+      this.user = user;
       this.loadConversations();
     });
   }
 
   loadConversations() {
-    this.conversationSvc.getConversationsForUser(this.userUid).subscribe(conversations => {
+    this.conversationSvc.getConversationsForUser(this.user.uid).subscribe(conversations => {
       this.conversations = conversations;
       console.log('this.conversation', conversations);
     });

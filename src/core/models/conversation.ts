@@ -3,7 +3,7 @@ import { User } from './user';
 export class Conversation {
 
     id: string;
-    memberIds: [];
+    members: [];
     profilePicture: string;
     displayMessage: string;
     users: User[];

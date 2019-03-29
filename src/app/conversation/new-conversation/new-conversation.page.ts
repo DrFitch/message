@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConversationService } from '../conversation.service';
+import { AuthenticationService } from 'src/app/shared/authentication.service';
+import { User } from 'src/core/models/user';
+import { FriendsSvcService } from 'src/app/shared/friends-svc.service';
 
 declare var navigator;
 declare var ContactFindOptions;
@@ -16,11 +19,30 @@ export class NewConversationPage implements OnInit {
   searchTerms = '';
   filteredContacts: any;
   members = [];
+  user: User;
+  friends: User[] = [];
 
-  constructor(private conversationSvc: ConversationService, private router: Router) { }
+  constructor(
+    private conversationSvc: ConversationService,
+    private router: Router,
+    private authSvc: AuthenticationService,
+    private friendSvc: FriendsSvcService) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    this.authSvc.user$.subscribe(user => {
+      console.log('user', user);
+      this.user = user;
+      this.getFriendsList();
+    });
+  }
+
+  getFriendsList() {
+    this.user.friendList.forEach(uid => {
+      this.friendSvc.getUserInfos(uid).subscribe(friend => {
+        this.friends.push(friend);
+      });
+    });
   }
 
   onDeviceReady() {
@@ -49,10 +71,14 @@ export class NewConversationPage implements OnInit {
   }
 
   createConversation() {
-    const selectedContact = this.contacts.filter(contact => contact.isSelected === true);
-    console.log('create conversation with members : ', selectedContact);
-    this.members.push('cw1jmSYNk3Yh4wR8C0k1anvNFet2');
-    this.conversationSvc.createConversation('id87jYN51zeBei5azwel2IoYzR93', this.members).subscribe(documentId => {
+    const selectedFriends = this.friends.filter(friend => friend['isSelected'] === true);
+    console.log('create conversation with members : ', selectedFriends);
+    selectedFriends.forEach((friend: User) => {
+      console.log('selectedFriends', friend);
+      this.members.push(friend.uid);
+    });
+    this.members.push(this.user.uid);
+    this.conversationSvc.createConversation(this.user.uid, this.members).subscribe(documentId => {
       this.router.navigateByUrl(`tabs/conversations/${documentId}`);
     });
   }
