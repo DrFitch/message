@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.1.13:8100" />
+    <content original-src="index.html" src="http://10.31.2.142:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -90,6 +90,10 @@
     <plugin name="cordova-plugin-firebase" spec="git+https://github.com/jestcastro/cordova-plugin-firebase.git" />
     <allow-navigation href="http://192.168.1.12:8100" sessionid="2adae2ed" />
     <allow-navigation href="http://192.168.0.41:8100" sessionid="6b6efffd" />
-    <allow-navigation href="http://192.168.1.13:8100" sessionid="3569fcd5" />
+    <allow-navigation href="http://192.168.1.13:8100" sessionid="22717292" />
+    <plugin name="cordova-plugin-telerik-imagepicker" spec="2.3.2" />
+    <plugin name="cordova-plugin-file" spec="6.0.1" />
+    <plugin name="cordova-plugin-camera" spec="4.0.3" />
+    <allow-navigation href="http://10.31.2.142:8100" sessionid="c58e8982" />
     <engine name="android" spec="7.1.4" />
 </widget>

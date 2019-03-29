@@ -108,6 +108,14 @@ export class ConversationService {
     }));
   }
 
+  sendPicture(conversationId, senderId, pictureUrl) {
+    return from(this.afs.collection(`conversations/${conversationId}/messages`).add({
+      imageUrl: pictureUrl,
+      senderId: senderId,
+      createdAt: new Date()
+    }));
+  }
+
   registerDisplayMessage(conversationId, message) {
     this.afs.collection(`conversations`).doc(conversationId).set({
       displayMessage: message

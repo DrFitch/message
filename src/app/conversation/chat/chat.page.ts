@@ -27,14 +27,14 @@ export class ChatPage implements OnInit {
   isLoading: boolean;
   userUid: string;
 
-  itemExpandWidth = 70;
+  itemExpandWidth = 80;
   isExpanded = true;
 
   constructor(
     private route: ActivatedRoute,
     private conversationSvc: ConversationService,
     private markdownService: MarkdownService,
-    private menu: MenuController
+    private menu: MenuController,
   ) { }
 
   ngOnInit() {
@@ -72,7 +72,7 @@ export class ChatPage implements OnInit {
   getConversationInterlocutors() {
     let result = '';
     if (this.members) {
-      console.log('this.members', this.members);
+      // console.log('this.members', this.members);
       this.members.forEach(interlocutor => {
         result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
       });
@@ -120,5 +120,16 @@ export class ChatPage implements OnInit {
   closeCollapside() {
     this.isExpanded = false;
   }
+
+  sendPictures(e) {
+    console.log('sendPictures e', e);
+    this.scrollToBottom();
+    this.conversationSvc.sendPicture(this.conversationId, this.userUid, e).subscribe(() => {
+      this.conversationSvc.registerDisplayMessage(this.conversationId, '(Picture)');
+      this.message = '';
+      this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
+    });
+  }
+
 
 }
