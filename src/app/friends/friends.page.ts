@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'src/core/models/user';
 import { FriendsSvcService } from '../shared/friends-svc.service';
 import { AuthenticationService } from '../shared/authentication.service';
+import * as _ from 'lodash';
 
 declare var navigator;
 declare var ContactFindOptions;
@@ -17,39 +18,27 @@ export class FriendsPage implements OnInit {
   contacts: User;
   searchTerm = '';
   filteredContacts: any;
-  usersList: User[];
-  macthingContact: any;
+  firestoreUsers: User[];
+  matchingContacts: any;
   searchedContact: any;
   myUser: User;
-  uidstring: string;
+  useruid: string;
   index: any;
-  haveFriend: boolean = false;
+  haveFriend = false;
 
-  constructor(private afs: AngularFirestore, private friendSvc: FriendsSvcService, private authSvc: AuthenticationService) { }
+  constructor(private friendSvc: FriendsSvcService, private authSvc: AuthenticationService) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    this.friendSvc.getUserList().subscribe(userListObj => {
-      this.usersList = userListObj;
-      console.log('1 - user list: ', userListObj);
-      // this.matchContactOnPhone();
+    this.friendSvc.getUserList().subscribe(users => {
+      this.firestoreUsers = users;
     });
-    this.authSvc.subjectUser$.subscribe(user => {
-      this.uidstring = user.uid;
+    this.authSvc.user$.subscribe(user => {
+      this.useruid = user.uid;
+      this.friendSvc.getUserInfos(this.useruid).subscribe(userInfo => {
+        this.myUser = userInfo;
+      });
     });
-
-    this.friendSvc.getUserInfos(this.uidstring).subscribe(userInfo => {
-      this.myUser = userInfo;
-      console.log('2 - myUser', this.myUser);
-      if (this.usersList) {
-        console.log('3 - matching method');
-        this.matchContactOnPhone();
-      }
-    });
-
-    console.log('stringUID', this.uidstring);
-    console.log('userInfo', this.myUser);
-
   }
 
   onDeviceReady() {
@@ -65,24 +54,41 @@ export class FriendsPage implements OnInit {
   }
 
   matchContactOnPhone() {
-    this.macthingContact = new Array();
-    this.filteredContacts.forEach(element => {
-      this.usersList.forEach(elementDB => {
-        if (element.phoneNumbers[0].value === elementDB.phoneNumber) {
-          this.macthingContact.push(elementDB);
+    this.matchingContacts = [];
+    this.filteredContacts = this.contacts;
+    this.filteredContacts.forEach(contact => {
+      if (contact.phoneNumbers) {
+        const phoneNumber = contact.phoneNumbers[0].value.replace(/\s/g, '');
+        const user = this.firestoreUsers.find(x => x.phoneNumber === phoneNumber);
+        if (user) {
+          this.matchingContacts.push(user);
         }
-      });
+      }
+      console.log('this.match', this.matchingContacts);
     });
-    console.log('4 - inside');
-    if (this.myUser) {
-      this.myUser.friendList.forEach(friendUID => {
-        this.friendSvc.getUserInfos(friendUID).subscribe(friend => {
-          console.log('friend added', friend);
-          this.macthingContact.push(friend);
-        });
-      });
-    }
-    console.log('matchingContacList: ', this.macthingContact);
+
+
+
+
+
+
+
+
+
+    // this.filteredContacts.forEach(element => {
+    //   this.firestoreUsers.forEach(elementDB => {
+    //     if (element.phoneNumbers[0].value === elementDB.phoneNumber) {
+    //       this.matchingContacts.push(elementDB);
+    //     }
+    //   });
+    // });
+    // if (this.myUser) {
+    //   this.myUser.friendList.forEach(friendUID => {
+    //     this.friendSvc.getUserInfos(friendUID).subscribe(friend => {
+    //       this.matchingContacts.push(friend);
+    //     });
+    //   });
+    // }
   }
 
   addFriend(userFriendUID: string) {
@@ -117,20 +123,18 @@ export class FriendsPage implements OnInit {
     this.haveFriend = false;
   }
 
-
   onSuccess(contacts) {
     this.contacts = contacts;
-    this.filteredContacts = this.contacts;
+    this.matchContactOnPhone();
   }
 
   onError(contactError) {
     console.log('Contact loading error : ', contactError);
   }
 
-  filterContacts(searchTerm) {
+  searchContacts(searchTerm) {
     console.log(searchTerm);
-    this.searchedContact = this.usersList.filter(x => x.name.match(searchTerm));
-    console.log('searchlisteeeuh:', this.searchedContact);
+    this.searchedContact = this.firestoreUsers.filter(x => x.name.match(searchTerm));
   }
 
 }

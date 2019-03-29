@@ -4,11 +4,12 @@
     Friends
   </h1>
 
-  <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="filterContacts($event.target.value)" debounce="300"
+  <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="searchContacts($event.target.value)" debounce="300"
     [(ngModel)]="searchTerm"></ion-searchbar>
 
-  <ion-list *ngIf="!searchTerm">
-    <ion-item *ngFor="let contact of macthingContact" lines="none">
+  <ion-list>
+    <ion-item *ngFor="let contact of matchingContacts" lines="none">
+      salut
       <ion-avatar slot="start">
         <ngx-avatar [name]="contact.name"></ngx-avatar>
       </ion-avatar>
