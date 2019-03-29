@@ -21,7 +21,7 @@
         <ion-avatar *ngIf="message.type === 'incoming'" class="align-avatar-message" slot="start">
           <img [src]="img">
         </ion-avatar>
-          <markdown *ngIf="message.text; else displayPicture" [data]="message.text"></markdown>
+        <markdown *ngIf="message.text; else displayPicture" [data]="message.text"></markdown>
         <ng-template #displayPicture>
           <img class="message-picture" [src]="message.imageUrl">
         </ng-template>

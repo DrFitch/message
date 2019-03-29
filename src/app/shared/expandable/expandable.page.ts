@@ -4,12 +4,14 @@ import { ModalController } from '@ionic/angular';
 import { GalleryModalPage } from './gallery-modal/gallery-modal.page';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { HelperService } from 'src/app/core/services/helper.service';
 
 @Component({
   selector: 'expandable',
   templateUrl: './expandable.page.html',
   styleUrls: ['./expandable.page.scss'],
-  providers: [AngularFireStorage],
+  providers: [AngularFireStorage, Camera],
   entryComponents: [GalleryModalPage]
 })
 
@@ -25,7 +27,12 @@ export class ExpandableComponent implements AfterViewInit {
 
   library = [];
 
-  constructor(public renderer: Renderer, private modalController: ModalController, private storage: AngularFireStorage) { }
+  constructor(
+    public renderer: Renderer,
+    private modalController: ModalController,
+    private storage: AngularFireStorage,
+    private camera: Camera,
+    private helperSvc: HelperService) { }
 
   ngAfterViewInit() {
     this.renderer.setElementStyle(this.expandWrapper.nativeElement, 'width', this.expandWidth + 'px');
@@ -59,6 +66,24 @@ export class ExpandableComponent implements AfterViewInit {
         });
       })).subscribe(() => {
       });
+  }
+
+  openCamera() {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64 (DATA_URL):
+      this.helperSvc.makeFileIntoBlob(imageData).then(result => {
+        this.uploadFile(result);
+      });
+    }, (err) => {
+      // Handle error
+    });
   }
 
   newGuid() {

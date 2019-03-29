@@ -93,6 +93,7 @@
     <allow-navigation href="http://192.168.1.13:8100" sessionid="22717292" />
     <plugin name="cordova-plugin-telerik-imagepicker" spec="2.3.2" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
-    <allow-navigation href="http://10.31.2.142:8100" sessionid="4ccb40a8" />
+    <plugin name="cordova-plugin-camera" spec="4.0.3" />
+    <allow-navigation href="http://10.31.2.142:8100" sessionid="c58e8982" />
     <engine name="android" spec="7.1.4" />
 </widget>

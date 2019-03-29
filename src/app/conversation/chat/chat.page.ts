@@ -27,7 +27,7 @@ export class ChatPage implements OnInit {
   isLoading: boolean;
   userUid: string;
 
-  itemExpandWidth = 70;
+  itemExpandWidth = 80;
   isExpanded = true;
 
   constructor(
@@ -124,11 +124,11 @@ export class ChatPage implements OnInit {
   sendPictures(e) {
     console.log('sendPictures e', e);
     this.scrollToBottom();
-      this.conversationSvc.sendPicture(this.conversationId, this.userUid, e).subscribe(() => {
-        this.conversationSvc.registerDisplayMessage(this.conversationId, this.markdownService.compile(this.message));
-        this.message = '';
-        this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
-      });
+    this.conversationSvc.sendPicture(this.conversationId, this.userUid, e).subscribe(() => {
+      this.conversationSvc.registerDisplayMessage(this.conversationId, '(Picture)');
+      this.message = '';
+      this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
+    });
   }
 
 

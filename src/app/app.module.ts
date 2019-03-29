@@ -14,6 +14,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AppComponent } from './app.component';
     AngularFireDatabaseModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+    CoreModule
   ],
   providers: [
     StatusBar,

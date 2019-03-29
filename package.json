@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^7.2.2",
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.2",
+    "@ionic-native/camera": "^5.3.0",
     "@ionic-native/contacts": "^5.2.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/file": "^5.3.0",
@@ -35,6 +36,7 @@
     "br-mask": "0.0.4",
     "cordova": "^8.1.2",
     "cordova-android": "7.1.4",
+    "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-contacts": "^3.0.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-file": "6.0.1",
@@ -107,7 +109,8 @@
       "cordova-support-google-services": {},
       "cordova-plugin-photo-library": {},
       "cordova-plugin-telerik-imagepicker": {},
-      "cordova-plugin-file": {}
+      "cordova-plugin-file": {},
+      "cordova-plugin-camera": {}
     },
     "platforms": [
       "android"
