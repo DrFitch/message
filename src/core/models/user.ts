@@ -5,6 +5,7 @@ export class User {
     phoneNumber?: string;
     status: any;
     friendList?: string[];
+    photoUrl?: string;
 
 
     constructor(data: any) {

@@ -73,6 +73,12 @@ export class AuthenticationService {
     });
   }
 
+  updateUserPhoto(photoURL: string, userUID: string) {
+    return this.afs.collection<User>('users').doc(userUID).update({
+      profilePicture: photoURL
+    });
+  }
+
   updateUserData(user) {
     // Sets user data to firestore on login
 

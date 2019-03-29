@@ -6,19 +6,8 @@
 
   <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
 
-  <!-- <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar> -->
-
-  <!-- <ion-virtual-scroll [items]="conversations">
-    <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
-      <ion-avatar slot="start">
-        <img [src]="img">
-      </ion-avatar>
-      <ion-label>
-        <h2>Finn</h2>
-        <h3>I'm a big deal</h3>
-        <p>{{ conversation.text }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-virtual-scroll> -->
+  <ion-item>
+    <ion-icon name="camera" (click)="openCamera()"></ion-icon>
+  </ion-item>
 
 </ion-content>
