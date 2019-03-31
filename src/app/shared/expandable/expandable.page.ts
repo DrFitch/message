@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, ElementRef, Input, Renderer, ViewChild, Output, EventEmitter } from '@angular/core';
-import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
-import { ModalController } from '@ionic/angular';
-import { GalleryModalPage } from './gallery-modal/gallery-modal.page';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Renderer, ViewChild } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { finalize } from 'rxjs/operators';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { ModalController } from '@ionic/angular';
+import { finalize } from 'rxjs/operators';
 import { HelperService } from 'src/app/core/services/helper.service';
+import { GalleryModalPage } from './gallery-modal/gallery-modal.page';
 
 @Component({
   selector: 'expandable',

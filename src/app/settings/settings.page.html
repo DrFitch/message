@@ -4,21 +4,29 @@
     Settings
   </h1>
 
-  <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+  <div class="btn-wrapper">
 
-  <!-- <ion-searchbar id="main-searchbar" mode="ios"></ion-searchbar> -->
+    <ion-img class="templateImg" *ngIf="!photoUrl"
+      src='https://upload.wikimedia.org/wikipedia/commons/7/7e/Circle-icons-profile.svg' (click)="openCamera()">
+    </ion-img>
 
-  <!-- <ion-virtual-scroll [items]="conversations">
-    <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
-      <ion-avatar slot="start">
-        <img [src]="img">
-      </ion-avatar>
-      <ion-label>
-        <h2>Finn</h2>
-        <h3>I'm a big deal</h3>
-        <p>{{ conversation.text }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-virtual-scroll> -->
+    <ion-avatar class="userImg" *ngIf="photoUrl" (click)="openCamera()">
+      <img [src]="photoUrl">
+    </ion-avatar>
 
+    <div class="item">
+      <p style="width:100px;margin:auto;text-align:center;font-weight:700;">Pseudo:</p>
+      <ion-input class="firstName" placeholder="{{firstName}}" [(ngModel)]="firstName"></ion-input>
+    </div>
+
+    <div class="item">
+      <ion-button *ngIf="!connecting" [disabled]="!firstName && !photoUrl" (click)="setUserNameAndPicture()">
+        Update
+      </ion-button>
+    </div>
+
+    <div class="item">
+      <ion-button color="danger" (click)="logout()">Logout</ion-button>
+    </div>
+  </div>
 </ion-content>

@@ -1,16 +1,29 @@
 <ion-content padding>
 
   <h1>
-    Vérification SMS
+    Inscription
   </h1>
 
   <div class="btn-wrapper">
-    <ion-input placeholder="Code SMS (6 chiffres)" [(ngModel)]="smsCode"></ion-input>
-    <ion-input placeholder="Prénom" [(ngModel)]="firstName"></ion-input>
+    <div class="item">
+      <ion-img class="templateImg" *ngIf="!photoUrl"
+        src='https://upload.wikimedia.org/wikipedia/commons/7/7e/Circle-icons-profile.svg' (click)="openCamera()">
+      </ion-img>
 
-    <ion-button *ngIf="!connecting" (click)="logOnVerifiation()">
-      Se connecter
-    </ion-button>
+      <ion-avatar class="userImg" *ngIf="photoUrl" (click)="openCamera()">
+        <img [src]="photoUrl">
+      </ion-avatar>
+    </div>
+
+    <div class="item">
+      <ion-input class="firstName" placeholder="Prénom" [(ngModel)]="firstName"></ion-input>
+    </div>
+
+    <div class="item">
+      <ion-button *ngIf="!connecting" [disabled]="!firstName && !photoUrl" (click)="setUserNameAndPicture()">
+        Continuer
+      </ion-button>
+    </div>
     <ion-spinner *ngIf="connecting" name="dots"></ion-spinner>
   </div>
 
