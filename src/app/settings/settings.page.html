@@ -1,24 +1,31 @@
 <ion-content>
 
   <h1 class="header-module">
-    Settings
+    Réglages
   </h1>
 
-  <ion-avatar class="userImg" *ngIf="photoUrl" (click)="openCamera()">
-    <img [src]="photoUrl">
-  </ion-avatar>
+  <div class="btn-wrapper">
 
-  <div class="item">
-    <ion-input class="firstName" placeholder="{{firstName}}" [(ngModel)]="firstName"></ion-input>
-  </div>
+    <ion-img class="templateImg" *ngIf="!photoUrl"
+      src='https://upload.wikimedia.org/wikipedia/commons/7/7e/Circle-icons-profile.svg' (click)="openCamera()">
+    </ion-img>
 
-  <div class="item">
-    <ion-button *ngIf="!connecting" [disabled]="!firstName && !photoUrl" (click)="setUserNameAndPicture()">
-      Continuer
-    </ion-button>
-  </div>
+    <ion-avatar class="userImg" *ngIf="photoUrl" (click)="openCamera()">
+      <img [src]="photoUrl">
+    </ion-avatar>
 
-  <div class="item">
-    <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+    <div class="item">
+      <ion-input class="firstName" placeholder="{{firstName}}" [(ngModel)]="firstName"></ion-input>
+    </div>
+
+    <div class="item">
+      <ion-button *ngIf="!connecting" [disabled]="!firstName && !photoUrl" (click)="setUserNameAndPicture()">
+        Mettre à jour
+      </ion-button>
+    </div>
+
+    <div class="item">
+      <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+    </div>
   </div>
 </ion-content>

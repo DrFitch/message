@@ -1,11 +1,11 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthenticationService } from '../shared/authentication.service';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { HelperService } from '../core/services/helper.service';
-import { finalize, first } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { finalize } from 'rxjs/operators';
 import { User } from 'src/core/models/user';
+import { HelperService } from '../core/services/helper.service';
+import { AuthenticationService } from '../shared/authentication.service';
 import { FriendsSvcService } from '../shared/friends-svc.service';
 
 @Component({
@@ -30,9 +30,12 @@ export class VerificationPage implements OnInit {
 
   ngOnInit() {
     this.authSvc.user$.subscribe(user => {
-      // this.userUID = user.uid;
-      this.userUID = 'id87jYN51zeBei5azwel2IoYzR93';
+      this.userUID = user.uid;
       this.myUser = user;
+
+      this.authSvc.getUserInfos(this.userUID).subscribe(userInfo => {
+        this.myUser = userInfo;
+      });
     });
   }
 
@@ -75,7 +78,7 @@ export class VerificationPage implements OnInit {
           this.pictureUploaded.next(result);
           console.log('result', result);
           if (this.userUID) {
-            // this.authSvc.updateUserPhoto(result, this.userUID);
+            this.authSvc.updateUserPhoto(result, this.userUID);
             this.photoUrl = result;
           }
           // this.isUploading = false;

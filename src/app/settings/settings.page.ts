@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AuthenticationService } from '../shared/authentication.service';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { HelperService } from '../core/services/helper.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { finalize } from 'rxjs/operators';
 import { User } from 'src/core/models/user';
+import { HelperService } from '../core/services/helper.service';
+import { AuthenticationService } from '../shared/authentication.service';
 
 @Component({
   selector: 'app-settings',
@@ -26,6 +26,7 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     this.authSvc.user$.subscribe(user => {
+      console.log(user);
       this.userUID = user.uid;
       this.myUser = user;
       this.photoUrl = user.profilePicture;

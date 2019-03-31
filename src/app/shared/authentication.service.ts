@@ -3,11 +3,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
 import * as firebase from 'firebase';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { User } from 'src/core/models/user';
-import { Platform } from '@ionic/angular';
 
 declare var cordova: any;
 
@@ -29,6 +29,7 @@ export class AuthenticationService {
 
     platform.ready().then(() => {
       cordova.plugins.firebase.auth.onAuthStateChanged(userInfo => {
+        console.log(userInfo);
         if (userInfo && userInfo.uid) {
           this.afs.firestore.doc(`/users/${userInfo.uid}`).get()
             .then(docSnapshot => {
