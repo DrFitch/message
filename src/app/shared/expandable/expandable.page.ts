@@ -70,7 +70,7 @@ export class ExpandableComponent implements AfterViewInit {
 
   openCamera() {
     const options: CameraOptions = {
-      quality: 100,
+      quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE

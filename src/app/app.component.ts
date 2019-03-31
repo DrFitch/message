@@ -4,11 +4,13 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Vibration } from '@ionic-native/vibration/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { HelperService } from './core/services/helper.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  providers: [Vibration]
+  providers: [Vibration, LocalNotifications]
 })
 
 export class AppComponent {
@@ -18,7 +20,9 @@ export class AppComponent {
     private statusBar: StatusBar,
     private firebase: Firebase,
     private toastCtrl: ToastController,
-    private vibration: Vibration
+    private vibration: Vibration,
+    private localNotifications: LocalNotifications,
+    private helperSvc: HelperService
   ) {
     this.initializeApp();
   }
@@ -28,15 +32,26 @@ export class AppComponent {
       if (this.platform.is('mobile')) {
         this.firebase.subscribe('all');
         this.firebase.onNotificationOpen().subscribe(async res => {
+          console.log('notification !!');
+
           if (res.tap) {
             console.log('notification ouverte avec appli en bg');
           } else {
             console.log('notification !!');
             this.vibration.vibrate(300);
-            (await this.toastCtrl.create({
-              message: res.body,
-              duration: 3000
-            })).present();
+            console.log('res', res);
+            await this.localNotifications.schedule({
+              id: 1,
+              led: { color: '#FF00FF', on: 500, off: 500 },
+              icon: 'https://cdn0.iconfinder.com/data/icons/twitter-ui-flat/48/Twitter_UI-18-512.png',
+              title: res.title,
+              text: res.body,
+              sound: 'file://sound.mp3',
+            });
+            // (await this.toastCtrl.create({
+            //   message: res.body,
+            //   duration: 3000
+            // })).present();
           }
         });
       }

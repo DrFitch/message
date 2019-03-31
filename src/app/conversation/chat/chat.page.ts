@@ -95,7 +95,6 @@ export class ChatPage implements OnInit {
         result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
       });
     }
-    console.log('result', result);
     return result;
   }
 

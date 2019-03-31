@@ -19,11 +19,9 @@ export class AuthGuardGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     this.authSvc.userSubject.subscribe(res => {
-      console.log('user', res);
       this.user = res;
     });
     if (!this.user) {
-      console.log('salut');
       this.router.navigateByUrl('/login');
       return false;
     }
