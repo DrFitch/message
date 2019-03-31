@@ -18,7 +18,7 @@ declare var cordova: any;
 export class AuthenticationService {
 
   connecting = false;
-  user$ = new BehaviorSubject<User>(null);
+  userSubject = new BehaviorSubject<User>(null);
   userTest: User;
 
   constructor(
@@ -35,7 +35,7 @@ export class AuthenticationService {
           this.afs.firestore.doc(`/users/${userInfo.uid}`).get()
             .then(docSnapshot => {
               if (docSnapshot.exists) {
-                this.user$.next(new User(docSnapshot.data()));
+                this.userSubject.next(new User(docSnapshot.data()));
                 this.router.navigateByUrl(`/tabs/conversations`);
               } else {
                 this.afs.doc(`users/${userInfo.uid}`).set({
@@ -45,7 +45,7 @@ export class AuthenticationService {
                   friendList: []
                 }).then(result => {
                   console.log('result creation', result);
-                  this.user$.next(new User(result));
+                  this.userSubject.next(new User(result));
                   this.router.navigateByUrl(`/verification`);
                 });
               }
@@ -92,7 +92,7 @@ export class AuthenticationService {
   }
 
   logout() {
-    this.user$.next(null);
+    this.userSubject.next(null);
     // this.subjectUser$.next(null);
     this.router.navigateByUrl('/login');
   }

@@ -25,7 +25,7 @@ export class SettingsPage implements OnInit {
     private storage: AngularFireStorage, ) { }
 
   ngOnInit() {
-    this.authSvc.user$.subscribe(user => {
+    this.authSvc.userSubject.subscribe(user => {
       console.log(user);
       this.userUID = user.uid;
       this.myUser = user;
@@ -68,7 +68,6 @@ export class SettingsPage implements OnInit {
         fileRef.getDownloadURL().subscribe(result => {
           // this.user.photoURL = result;
           this.pictureUploaded.next(result);
-          console.log('result', result);
           if (this.userUID) {
             this.authSvc.updateUserPhoto(result, this.userUID);
             this.photoUrl = result;

@@ -27,8 +27,7 @@ export class VerificationPage implements OnInit {
     private storage: AngularFireStorage) { }
 
   ngOnInit() {
-    this.authSvc.user$.subscribe(user => {
-      console.log('verifUser', user);
+    this.authSvc.userSubject.subscribe(user => {
       this.userUID = user.uid;
       this.myUser = user;
 
