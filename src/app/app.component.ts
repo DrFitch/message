@@ -3,10 +3,12 @@ import { Firebase } from '@ionic-native/firebase/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform, ToastController } from '@ionic/angular';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
+  providers: [Vibration]
 })
 
 export class AppComponent {
@@ -15,7 +17,8 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private firebase: Firebase,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private vibration: Vibration
   ) {
     this.initializeApp();
   }
@@ -29,6 +32,7 @@ export class AppComponent {
             console.log('notification ouverte avec appli en bg');
           } else {
             console.log('notification !!');
+            this.vibration.vibrate(300);
             (await this.toastCtrl.create({
               message: res.body,
               duration: 3000
