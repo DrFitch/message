@@ -56,7 +56,6 @@ export class ConversationPage implements OnInit {
     // ? si il n'y a que deux utilisateurs dans la conversation on fait en sorte d'afficher le status de connexion du partenaire
     if (listOfUsersInConversation.length === 1) {
       if (listOfUsersInConversation[0].status) {
-        console.log('listOfUsersInConversation[0].status', listOfUsersInConversation[0]);
         // ! on gere les trois etats pour une discussion avec un seul destinataire
         return {
           online: listOfUsersInConversation[0].status.status === 'online',
@@ -65,7 +64,7 @@ export class ConversationPage implements OnInit {
         };
       }
     } else { // ? si il s'agit d'un groupe d'utilisateur on vérifie qu'il y ai au moins un utilisateur de connecté
-      if (conversation.users.find(x => x.status === 'online')) {
+      if (conversation.users.find(x => x.status.status === 'online')) {
         return {
           online: true
         };
