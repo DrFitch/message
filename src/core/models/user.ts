@@ -6,6 +6,7 @@ export class User {
     public status: any;
     public friendList?: string[];
     public profilePicture: string;
+    public timestamp: number;
 
     constructor(data: any) {
         for (const key in data) {

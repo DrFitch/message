@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'src/core/models/user';
-import { FriendsSvcService } from '../shared/friends-svc.service';
+import { FriendsService } from './friends.service';
 import { AuthenticationService } from '../shared/authentication.service';
-import * as _ from 'lodash';
+import { remove } from 'lodash';
 
 declare var navigator;
 declare var ContactFindOptions;
@@ -15,32 +14,35 @@ declare var ContactFindOptions;
 })
 export class FriendsPage implements OnInit {
 
-  contacts: User;
-  searchTerm = '';
-  filteredContacts: any;
+  contacts: any[];
   firestoreUsers: User[];
+  searchResults = [];
+  searchTerm = '';
   matchingContacts = [];
   searchedContact: any;
-  myUser: User;
+  user: User;
   useruid: string;
   index: any;
   haveFriend = false;
 
-  constructor(private friendSvc: FriendsSvcService, private authSvc: AuthenticationService) { }
+  suggestions = [];
+  friends = [];
+
+  constructor(private friendSvc: FriendsService, private authSvc: AuthenticationService) { }
 
   ngOnInit() {
-
-    this.authSvc.user$.subscribe(user => {
-      this.useruid = user.uid;
-      this.friendSvc.getUserInfos(this.useruid).subscribe(userInfo => {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        this.myUser = userInfo;
+    document.addEventListener('deviceready', this.loadContacts.bind(this), false);
+    this.authSvc.getUser(this.authSvc.userSubject.value.uid).subscribe(user => {
+      this.user = user;
+      this.friendSvc.getFriends(user.uid).subscribe(result => {
+        this.friends = result;
       });
     });
   }
 
-  onDeviceReady() {
-    this.loadContacts();
+  searchContacts(searchTerm) {
+    this.searchTerm = searchTerm;
+    this.searchResults = this.firestoreUsers.filter(x => x.name.match(searchTerm));
   }
 
   loadContacts() {
@@ -51,79 +53,58 @@ export class FriendsPage implements OnInit {
     navigator.contacts.find(fields, this.onSuccess.bind(this), this.onError, options);
   }
 
-  matchContactOnPhone() {
-    // this.matchingContacts = [];
-    this.filteredContacts = this.contacts;
-    if (this.firestoreUsers) {
-      this.filteredContacts.forEach(contact => {
-        if (contact.phoneNumbers) {
-          const phoneNumber = contact.phoneNumbers[0].value.replace(/\s/g, '');
-          const user = this.firestoreUsers.find(x => x.phoneNumber === phoneNumber);
-          if (user) {
-            this.matchingContacts.push(user);
-            console.log('matchingContacts : ', this.matchingContacts);
+  loadFirestoreUsers() {
+    this.friendSvc.getUserList().subscribe(
+      (users) => {
+        this.firestoreUsers = users;
+        this.findSuggestions();
+      }
+    );
+  }
+
+  findContactsAlreadyOnPhone() {
+    this.contacts.forEach(contact => {
+      if (contact.phoneNumbers) {
+        const phoneNumber = contact.phoneNumbers[0].value.replace(/\s/g, '');
+        const user = this.firestoreUsers.find(x => x.phoneNumber === phoneNumber);
+        if (user) {
+          // this.filteredContacts.push(user);
+        }
+      }
+    });
+  }
+
+  findSuggestions() {
+    this.contacts.map(contact => {
+      if (contact.phoneNumbers) {
+        const suggestion = this.firestoreUsers.find(user => user.phoneNumber === contact.phoneNumbers[0].value.replace(/\s/g, ''));
+        if (suggestion) {
+          if (!this.isFriend(suggestion.uid)) {
+            this.suggestions.push(suggestion);
           }
         }
-      });
-    }
-
-    if (this.myUser.friendList) {
-      this.myUser.friendList.forEach(friendUID => {
-        this.friendSvc.getUserInfos(friendUID).subscribe(friend => {
-          this.matchingContacts.push(friend);
-        });
-      });
-    }
-  }
-
-  addFriend(userFriendUID: string) {
-    this.myUser.friendList.push(userFriendUID);
-    this.friendSvc.addFriend(this.myUser.friendList, this.myUser.uid);
-    this.matchContactOnPhone();
-    this.searchTerm = '';
-  }
-
-  removeFriend(userFriendUID: string) {
-    this.index = this.myUser.friendList.indexOf(userFriendUID);
-    if (this.index > -1) {
-      this.myUser.friendList.splice(this.index, 1);
-    }
-    this.friendSvc.addFriend(this.myUser.friendList, this.myUser.uid);
-    this.matchContactOnPhone();
+      }
+    });
   }
 
   isFriend(uid: string) {
-    if (!this.myUser.friendList) { return false; }
-    if (this.myUser.friendList.indexOf(uid) > -1) {
-      return true;
-    }
-    return false;
+    return this.user.friendList.includes(uid) ? true : false;
   }
 
-  haveFriends() {
-    if (this.myUser) {
-      if (this.myUser.friendList) {
-        this.haveFriend = true;
-      }
-    }
-    this.haveFriend = false;
+  addFriend(friendUid: string) {
+    this.friendSvc.addFriend(this.user.uid, friendUid);
+  }
+
+  removeFriend(friendUid: string) {
+    this.friendSvc.removeFriend(this.user.uid, friendUid);
   }
 
   onSuccess(contacts) {
     this.contacts = contacts;
-    this.friendSvc.getUserList().subscribe(users => {
-      this.firestoreUsers = users;
-      this.matchContactOnPhone();
-    });
+    this.loadFirestoreUsers();
   }
 
   onError(contactError) {
-    console.log('Contact loading error : ', contactError);
-  }
-
-  searchContacts(searchTerm) {
-    console.log(searchTerm);
-    this.searchedContact = this.firestoreUsers.filter(x => x.name.match(searchTerm));
   }
 
 }

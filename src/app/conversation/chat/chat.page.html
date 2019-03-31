@@ -6,11 +6,14 @@
     </ion-buttons>
     <ion-label>
       <h2 class="interlocutor-name">{{ getConversationInterlocutors() }}</h2>
-      <h2 class="interlocutor-timestamp">Online 13 minutes ago</h2>
+      <h2 class="interlocutor-timestamp">Online {{ getLastConnectionStamp() }}</h2>
     </ion-label>
     <ion-avatar class="align-avatar" slot="start">
-      <img [src]="img">
+      <img class="profile-picture" [src]="interlocutors[0]?.profilePicture">
     </ion-avatar>
+    <span class="call-icon" (click)="call()">
+      <ion-icon name="call"></ion-icon>
+    </span>
   </ion-toolbar>
 </ion-header>
 

@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { User } from 'src/core/models/user';
 import { Platform } from '@ionic/angular';
+import { User } from 'src/core/models/user';
 
 declare var cordova: any;
 
@@ -18,7 +18,8 @@ declare var cordova: any;
 export class AuthenticationService {
 
   connecting = false;
-  user$ = new BehaviorSubject<User>(null);
+  userSubject = new BehaviorSubject<User>(null);
+  userId: string;
 
   constructor(
     platform: Platform,
@@ -30,10 +31,11 @@ export class AuthenticationService {
     platform.ready().then(() => {
       cordova.plugins.firebase.auth.onAuthStateChanged(userInfo => {
         if (userInfo && userInfo.uid) {
+          this.userId = userInfo.uid;
           this.afs.firestore.doc(`/users/${userInfo.uid}`).get()
             .then(docSnapshot => {
               if (docSnapshot.exists) {
-                this.user$.next(new User(docSnapshot.data()));
+                this.userSubject.next(new User(docSnapshot.data()));
               } else {
                 this.afs.doc(`users/${userInfo.uid}`).set({
                   name: 'Test',
@@ -42,13 +44,14 @@ export class AuthenticationService {
                   friendList: []
                 }).then(result => {
                   console.log('result creation', result);
-                  this.user$.next(new User(result));
+                  this.userSubject.next(new User(result));
                 });
               }
               this.router.navigateByUrl(`/tabs/conversations`);
             });
         } else {
           // user was signed out
+          return of(null);
         }
       }).bind(this);
     });
@@ -71,12 +74,12 @@ export class AuthenticationService {
     }, { merge: true });
   }
 
-  getUser(uid: string): Observable<any> {
-    return this.afs.collection(`users/${uid}`).valueChanges();
+  getUser(uid: string): Observable<User> {
+    return this.afs.doc<User>(`users/${uid}`).valueChanges();
   }
 
   logout() {
-    this.user$.next(null);
+    this.userSubject.next(null);
     // this.subjectUser$.next(null);
     this.router.navigateByUrl('/login');
   }
@@ -86,14 +89,11 @@ export class AuthenticationService {
   }
 
   async setPresence(status: string) {
-    // const user = await this.getUser();
-    // if (user) {
-    this.afs.doc(`users/IGyZdaotm2s87FpWAaVk`).update({
+    this.afs.doc(`users/${this.userId}`).update({
       status,
       timestamp: Date.now()
     });
-    return this.db.object(`status/IGyZdaotm2s87FpWAaVk`).update({ status, timestamp: this.timestamp });
-    // }
+    return this.db.object(`status/${this.userId}`).update({ status, timestamp: this.timestamp });
   }
 
   get timestamp() {
@@ -102,7 +102,10 @@ export class AuthenticationService {
 
   updateOnUser() {
     const connection = this.db.object('.info/connected').valueChanges().pipe(
-      map(connected => connected ? 'online' : 'offline')
+      map(connected => {
+        console.log('connected ? ', connected);
+        return connected ? 'online' : 'offline';
+      })
     );
 
     return this.afAuth.authState.pipe(

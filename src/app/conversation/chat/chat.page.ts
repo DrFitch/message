@@ -8,6 +8,7 @@ import { ConversationService } from '../conversation.service';
 import { AuthenticationService } from 'src/app/shared/authentication.service';
 import { User } from 'src/core/models/user';
 import { Conversation } from 'src/core/models/conversation';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-chat',
@@ -30,6 +31,7 @@ export class ChatPage implements OnInit {
   isLoading: boolean;
   user: User;
   conversation: Conversation;
+  interlocutors: User[] = [];
 
   itemExpandWidth = 80;
   isExpanded = true;
@@ -45,18 +47,28 @@ export class ChatPage implements OnInit {
   ngOnInit() {
     this.conversationId = this.route.snapshot.paramMap.get('uid');
     if (this.conversationId) {
-      this.authSvc.user$.subscribe(user => {
+      this.authSvc.userSubject.subscribe(user => {
         this.user = user;
         this.load();
       });
     }
-    document.querySelector('ion-tab-bar').style.display = 'none';
+    // document.querySelector('ion-tab-bar').style.display = 'none';
   }
 
   load(): any {
     this.isLoading = true;
     this.conversationSvc.getConversation(this.conversationId).subscribe(conversation => {
-      console.log('conversation', conversation);
+      const members = conversation.members.filter(x => x !== this.user.uid);
+      members.forEach(uid => {
+        this.authSvc.getUser(uid).subscribe(result => {
+          if (this.interlocutors.find(x => x.uid === result.uid)) {
+            const index = this.interlocutors.findIndex(x => x.uid === result.uid);
+            this.interlocutors[index] = result;
+          } else {
+            this.interlocutors.push(result);
+          }
+        });
+      });
     });
     this.conversationSvc.getMessages(this.conversationId).subscribe(messages => {
       this.messages = orderBy(messages, ['createdAt'], ['asc']);
@@ -78,12 +90,12 @@ export class ChatPage implements OnInit {
 
   getConversationInterlocutors() {
     let result = '';
-    if (this.members) {
-      // console.log('this.members', this.members);
-      this.members.forEach(interlocutor => {
+    if (this.interlocutors) {
+      this.interlocutors.forEach(interlocutor => {
         result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
       });
     }
+    console.log('result', result);
     return result;
   }
 
@@ -137,5 +149,17 @@ export class ChatPage implements OnInit {
     });
   }
 
+  getLastConnectionStamp() {
+    if (this.interlocutors.length > 0) {
+      if (this.interlocutors[0].status === 'online') {
+        return '';
+      }
+      return moment(this.interlocutors[0].timestamp).toNow(true) + ' ago';
+    }
+  }
+
+  call() {
+    console.log('calling...');
+  }
 
 }

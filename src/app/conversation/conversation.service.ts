@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, first, flatMap, switchMap } from 'rxjs/operators';
 import { Conversation } from 'src/core/models/conversation';
 import { User } from 'src/core/models/user';
 import { AuthenticationService } from '../shared/authentication.service';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +20,26 @@ export class ConversationService {
     );
   }
 
-  getUsersInConversation(conversationId: string): Observable<User[]> {
-    return this.afs.collection('conversations').doc(conversationId).get().pipe(
-      map(conversation => {
-        const members = conversation.data().members;
-        return members.map((memberId: string) => {
-          this.afs.collection('users').doc(memberId).get().subscribe(result => {
-            const user = result.data();
-            return new User(user);
+  getConversationInterlocutors(conversationId): Observable<any> {
+    // flatMap((conversation: Conversation) => {
+    //   const users: User[] = [];
+    //   conversation.members.forEach(uid => {
+    //     this.authSvc.getUser(uid).pipe(
+    //       map((result) => {
+    //         users.push(result);
+    //       }));
+    //   });
+    //   return users;
+    // })
+    return this.afs.doc(`conversations/${conversationId}`).valueChanges().pipe(
+      map((conversation: Conversation) => {
+        const user: User[] = [];
+        conversation.members.map(uid => {
+          this.authSvc.getUser(uid).subscribe(result => {
+            user.push(result);
           });
         });
+        return user;
       })
     );
   }
@@ -86,8 +97,8 @@ export class ConversationService {
     );
   }
 
-  getConversation(conversationId): Observable<any> {
-    return this.afs.doc(`conversations/${conversationId}`).valueChanges();
+  getConversation(conversationId): Observable<Conversation> {
+    return this.afs.doc<Conversation>(`conversations/${conversationId}`).valueChanges();
   }
 
   getMessages(conversationId): Observable<any> {

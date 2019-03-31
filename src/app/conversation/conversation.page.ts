@@ -16,7 +16,6 @@ declare var cordova: any;
 export class ConversationPage implements OnInit {
 
   user: User;
-  userUid: string;
   isLoading = false;
   conversations: Conversation[];
 
@@ -26,7 +25,7 @@ export class ConversationPage implements OnInit {
     public conversationSvc: ConversationService) { }
 
   ngOnInit() {
-    this.authSvc.user$.subscribe(user => {
+    this.authSvc.userSubject.subscribe(user => {
       this.user = user;
       this.loadConversations();
     });
@@ -53,19 +52,19 @@ export class ConversationPage implements OnInit {
   }
 
   getPresenceLightColor(conversation: Conversation) {
-    const listOfUsersInConversation = conversation.users.filter(x => x.uid !== this.userUid);
+    const listOfUsersInConversation = conversation.users.filter(x => x.uid !== this.user.uid);
     // ? si il n'y a que deux utilisateurs dans la conversation on fait en sorte d'afficher le status de connexion du partenaire
     if (listOfUsersInConversation.length === 1) {
       if (listOfUsersInConversation[0].status) {
         // ! on gere les trois etats pour une discussion avec un seul destinataire
         return {
-          online: listOfUsersInConversation[0].status.status === 'online',
-          away: listOfUsersInConversation[0].status.status === 'away',
-          offline: listOfUsersInConversation[0].status.status === 'offline',
+          online: listOfUsersInConversation[0].status === 'online',
+          away: listOfUsersInConversation[0].status === 'away',
+          offline: listOfUsersInConversation[0].status === 'offline',
         };
       }
     } else { // ? si il s'agit d'un groupe d'utilisateur on vérifie qu'il y ai au moins un utilisateur de connecté
-      if (conversation.users.find(x => x.status.status === 'online')) {
+      if (conversation.users.find(x => x.status === 'online')) {
         return {
           online: true
         };

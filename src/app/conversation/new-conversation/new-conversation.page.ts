@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ConversationService } from '../conversation.service';
 import { AuthenticationService } from 'src/app/shared/authentication.service';
 import { User } from 'src/core/models/user';
-import { FriendsSvcService } from 'src/app/shared/friends-svc.service';
+import { FriendsService } from 'src/app/friends/friends.service';
 
 declare var navigator;
 declare var ContactFindOptions;
@@ -26,11 +26,11 @@ export class NewConversationPage implements OnInit {
     private conversationSvc: ConversationService,
     private router: Router,
     private authSvc: AuthenticationService,
-    private friendSvc: FriendsSvcService) { }
+    private friendSvc: FriendsService) { }
 
   ngOnInit() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-    this.authSvc.user$.subscribe(user => {
+    this.authSvc.userSubject.subscribe(user => {
       console.log('user', user);
       this.user = user;
       this.getFriendsList();
@@ -38,10 +38,8 @@ export class NewConversationPage implements OnInit {
   }
 
   getFriendsList() {
-    this.user.friendList.forEach(uid => {
-      this.friendSvc.getUserInfos(uid).subscribe(friend => {
-        this.friends.push(friend);
-      });
+    this.friendSvc.getFriends(this.user.uid).subscribe(friends => {
+      this.friends = friends;
     });
   }
 
