@@ -44,6 +44,12 @@ export class ConversationService {
     );
   }
 
+  getTypingUsers(conversationId: string): Observable<string[]> {
+    return this.afs.doc(`conversations/${conversationId}`).valueChanges().pipe(
+      map((conversation: Conversation) => conversation.typingUsers)
+    );
+  }
+
   getConversationsForUser(uid: string): Observable<Conversation[]> {
     return this.afs.collection('conversations', ref => ref.where('members', 'array-contains', uid)).snapshotChanges().pipe(
       map(conversations => {
@@ -150,5 +156,13 @@ export class ConversationService {
     this.afs.collection(`conversations`).doc(conversationId).update({
       typingUsers: typersArray.filter(typer => typer.id !== userId)
     });
+  }
+
+  getProfilePictureByUid(uid: string): Promise<any> {
+    return this.afs.firestore.doc(`users/${uid}`).get();
+  }
+
+  deleteConversation(conversationId: string) {
+    return this.afs.doc(`conversations/${conversationId}`).delete();
   }
 }

@@ -13,16 +13,23 @@
 
   <div *ngIf="!isLoading; else loader">
     <ion-virtual-scroll *ngIf="conversations; else noConversations" [items]="conversations">
-      <ion-item *virtualItem="let conversation" lines="none" (click)="openChat(conversation.id)">
-        <ion-avatar slot="start">
-          <img [src]="conversation.users[0]?.profilePicture">
-          <div class="presence-light" [ngClass]="getPresenceLightColor(conversation)"></div>
-        </ion-avatar>
-        <ion-label>
-          <h2> {{ conversationSvc.getConversationMembersFormatted(conversation.users, user.uid) }}</h2>
-          <h3 class="fit-message">{{ displayLastMessage(conversation) }}</h3>
-        </ion-label>
-      </ion-item>
+      <ion-item-sliding *virtualItem="let conversation" lines="none">
+        <ion-item (click)="openChat(conversation.id)" lines="none">
+          <ion-avatar slot="start">
+            <img [src]="conversation.users[0]?.profilePicture">
+            <div class="presence-light" [ngClass]="getPresenceLightColor(conversation)"></div>
+          </ion-avatar>
+          <ion-label>
+            <h2> {{ conversationSvc.getConversationMembersFormatted(conversation.users, user.uid) }}</h2>
+            <h3 class="fit-message">{{ displayLastMessage(conversation) }}</h3>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="deleteConversation(conversation)" style="background: lightcoral; font-size: 24px;">
+            <ion-icon name="trash"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-virtual-scroll>
     <ng-template #noConversations>
       <p class="no-conversations">Press ⊕ to start a new conversation ! </p>
