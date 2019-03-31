@@ -43,53 +43,36 @@ export class ExpandableComponent implements AfterViewInit {
     });
     await modal.present();
     const test = await modal.onDidDismiss();
-    console.log('test', test);
     this.uploadFile(test.data[0]);
   }
 
   uploadFile(picture) {
-    // const file = event.target.files[0];
-    const filePath = `picture-${this.newGuid()}`;
+    const filePath = `picture-${this.helperSvc.newGuid()}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, picture.imgBlob);
-    // this.uploadPercent = task.percentageChanges();
     task.snapshotChanges().pipe(
       finalize(() => {
         fileRef.getDownloadURL().subscribe(result => {
-          // this.user.photoURL = result;
           this.pictureUploaded.next(result);
-          console.log('result', result);
-
-          // this.isUploading = false;
-          // this.auth.updateUserPhoto(user, this.test);
         });
-      })).subscribe(() => {
-      });
+      })
+    ).subscribe(() => {
+    });
   }
 
   openCamera() {
     const options: CameraOptions = {
-      quality: 70,
+      quality: 60,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
       this.helperSvc.makeFileIntoBlob(imageData).then(result => {
         this.uploadFile(result);
       });
     }, (err) => {
       // Handle error
-    });
-  }
-
-  newGuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      // tslint:disable-next-line:no-bitwise
-      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
     });
   }
 

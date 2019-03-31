@@ -30,10 +30,6 @@ export class VerificationPage implements OnInit {
     this.authSvc.userSubject.subscribe(user => {
       this.userUID = user.uid;
       this.myUser = user;
-
-      // this.authSvc.getUserInfos(this.userUID).subscribe(userInfo => {
-      //   this.myUser = userInfo;
-      // });
     });
   }
 
@@ -46,15 +42,13 @@ export class VerificationPage implements OnInit {
 
   openCamera() {
     const options: CameraOptions = {
-      quality: 70,
+      quality: 60,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       cameraDirection: this.camera.Direction.FRONT
     };
     this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
       this.helperSvc.makeFileIntoBlob(imageData).then(result => {
         this.uploadFile(result);
       });
@@ -64,33 +58,20 @@ export class VerificationPage implements OnInit {
   }
 
   uploadFile(picture) {
-    // const file = event.target.files[0];
-    const filePath = `picture-${this.newGuid()}`;
+    const filePath = `picture-${this.helperSvc.newGuid()}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, picture.imgBlob);
-    // this.uploadPercent = task.percentageChanges();
     task.snapshotChanges().pipe(
       finalize(() => {
         fileRef.getDownloadURL().subscribe(result => {
-          // this.user.photoURL = result;
           this.pictureUploaded.next(result);
-          console.log('result', result);
           if (this.userUID) {
             this.authSvc.updateUserPhoto(result, this.userUID);
             this.photoUrl = result;
           }
-          // this.isUploading = false;
-          // this.auth.updateUserPhoto(user, this.test);
         });
-      })).subscribe(() => {
-      });
-  }
-
-  newGuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      // tslint:disable-next-line:no-bitwise
-      const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
+      })
+    ).subscribe(() => {
     });
   }
 
