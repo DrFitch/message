@@ -1,7 +1,7 @@
 <ion-content>
 
   <h1 class="header-module">
-    Réglages
+    Settings
   </h1>
 
   <div class="btn-wrapper">
@@ -15,17 +15,18 @@
     </ion-avatar>
 
     <div class="item">
+      <p style="width:100px;margin:auto;text-align:center;font-weight:700;">Pseudo:</p>
       <ion-input class="firstName" placeholder="{{firstName}}" [(ngModel)]="firstName"></ion-input>
     </div>
 
     <div class="item">
       <ion-button *ngIf="!connecting" [disabled]="!firstName && !photoUrl" (click)="setUserNameAndPicture()">
-        Mettre à jour
+        Update
       </ion-button>
     </div>
 
     <div class="item">
-      <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+      <ion-button color="danger" (click)="logout()">Logout</ion-button>
     </div>
   </div>
 </ion-content>

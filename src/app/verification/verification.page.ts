@@ -30,12 +30,13 @@ export class VerificationPage implements OnInit {
 
   ngOnInit() {
     this.authSvc.user$.subscribe(user => {
+      console.log('verifUser', user);
       this.userUID = user.uid;
       this.myUser = user;
 
-      this.authSvc.getUserInfos(this.userUID).subscribe(userInfo => {
-        this.myUser = userInfo;
-      });
+      // this.authSvc.getUserInfos(this.userUID).subscribe(userInfo => {
+      //   this.myUser = userInfo;
+      // });
     });
   }
 
@@ -48,7 +49,7 @@ export class VerificationPage implements OnInit {
 
   openCamera() {
     const options: CameraOptions = {
-      quality: 100,
+      quality: 70,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,

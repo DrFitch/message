@@ -19,6 +19,7 @@ export class AuthenticationService {
 
   connecting = false;
   user$ = new BehaviorSubject<User>(null);
+  userTest: User;
 
   constructor(
     platform: Platform,
@@ -35,6 +36,7 @@ export class AuthenticationService {
             .then(docSnapshot => {
               if (docSnapshot.exists) {
                 this.user$.next(new User(docSnapshot.data()));
+                this.router.navigateByUrl(`/tabs/conversations`);
               } else {
                 this.afs.doc(`users/${userInfo.uid}`).set({
                   name: 'Test',
@@ -44,9 +46,9 @@ export class AuthenticationService {
                 }).then(result => {
                   console.log('result creation', result);
                   this.user$.next(new User(result));
+                  this.router.navigateByUrl(`/verification`);
                 });
               }
-              this.router.navigateByUrl(`/tabs/conversations`);
             });
         } else {
           // user was signed out
@@ -59,9 +61,7 @@ export class AuthenticationService {
 
   loginWithPhoneNumber(phoneNumber: string) {
     this.connecting = true;
-    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000).then(
-      this.router.navigateByUrl(`/verification`)
-    );
+    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000);
   }
 
   updateUserPhoto(photoURL: string, userUID: string) {
