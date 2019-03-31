@@ -35,6 +35,8 @@ export class ChatPage implements OnInit {
 
   itemExpandWidth = 80;
   isExpanded = true;
+  typers = [];
+  membersNonFiltered;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,14 +54,13 @@ export class ChatPage implements OnInit {
         this.load();
       });
     }
-    // document.querySelector('ion-tab-bar').style.display = 'none';
+    document.querySelector('ion-tab-bar').style.display = 'none';
   }
 
   load(): any {
     this.isLoading = true;
     this.conversationSvc.getConversation(this.conversationId).subscribe(conversation => {
-      const members = conversation.members.filter(x => x !== this.user.uid);
-      members.forEach(uid => {
+      conversation.members.forEach(uid => {
         this.authSvc.getUser(uid).subscribe(result => {
           if (this.interlocutors.find(x => x.uid === result.uid)) {
             const index = this.interlocutors.findIndex(x => x.uid === result.uid);
@@ -74,6 +75,9 @@ export class ChatPage implements OnInit {
       this.messages = orderBy(messages, ['createdAt'], ['asc']);
       this.isLoading = false;
       this.scrollToBottom();
+    });
+    this.conversationSvc.getTypingUsers(this.conversationId).subscribe(typers => {
+      this.typers = typers;
     });
   }
 
@@ -90,8 +94,9 @@ export class ChatPage implements OnInit {
 
   getConversationInterlocutors() {
     let result = '';
+    const members = this.interlocutors.filter(x => x.uid !== this.user.uid);
     if (this.interlocutors) {
-      this.interlocutors.forEach(interlocutor => {
+      members.forEach(interlocutor => {
         result += interlocutor.name + (this.members.length > 1 ? ', ' : '');
       });
     }
@@ -112,8 +117,8 @@ export class ChatPage implements OnInit {
     this.conversationSvc.setUserIsTyping(this.conversationId, this.user.uid);
   }
 
-  registerDisplayMessage() {
-
+  displayTabBar() {
+    document.querySelector('ion-tab-bar').style.display = 'flex';
   }
 
   getClasses(senderId: string) {
@@ -161,4 +166,7 @@ export class ChatPage implements OnInit {
     console.log('calling...');
   }
 
+  getProfilePictureTyper(uid) {
+    return this.interlocutors.find(x => x.uid === uid).profilePicture;
+  }
 }

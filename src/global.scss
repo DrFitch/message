@@ -12,44 +12,63 @@
 
 html,
 body {
-  font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
+    font-family: Helvetica Neue, Segoe UI, Helvetica, Arial, sans-serif;
 }
 
 // cards presentation
 h1.header-module {
-  font-size: 40px;
-  font-weight: 300;
-  text-align: center;
-  width: 100%;
-  padding: 100px 0 70px 0px;
+    font-size: 40px;
+    font-weight: 300;
+    text-align: center;
+    width: 100%;
+    padding: 100px 0 70px 0px;
 }
 
 #main-searchbar {
-  display: flex;
-  flex-direction: column;
-  /deep/ .searchbar-input-container.sc-ion-searchbar-ios {
-    width: 90%;
-  }
-  /deep/ .searchbar-input.sc-ion-searchbar-ios {
-    border-radius: 20px !important;
-  }
-  padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+
+    /deep/ .searchbar-input-container.sc-ion-searchbar-ios {
+        width: 90%;
+    }
+
+    /deep/ .searchbar-input.sc-ion-searchbar-ios {
+        border-radius: 20px !important;
+    }
+
+    padding-bottom: 20px;
 }
 
 markdown {
-  p {
-    margin: 0;
-  }
+    p {
+        margin: 0;
+    }
 
-  blockquote {
-    margin: 0;
-  }
+    blockquote {
+        margin: 0;
+    }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5 {
-    margin: 0;
-  }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        margin: 0;
+    }
+}
+
+.splash {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f2f6fa;
+}
+
+.loader {
+    width: 115px;;
+    z-index: 10;
 }

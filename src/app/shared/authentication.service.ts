@@ -88,7 +88,7 @@ export class AuthenticationService {
   }
 
   getUser(uid: string): Observable<any> {
-    return this.afs.collection(`users/${uid}`).valueChanges();
+    return this.afs.doc(`users/${uid}`).valueChanges();
   }
 
   logout() {

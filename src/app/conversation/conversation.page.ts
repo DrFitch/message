@@ -72,4 +72,8 @@ export class ConversationPage implements OnInit {
     }
   }
 
+  deleteConversation(conversation: Conversation) {
+    this.conversationSvc.deleteConversation(conversation.id);
+  }
+
 }

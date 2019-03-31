@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button style="padding: 0!important; margin: 0!important;" (click)="registerDisplayMessage()">
+      <ion-back-button style="padding: 0!important; margin: 0!important;" (click)="displayTabBar()">
       </ion-back-button>
     </ion-buttons>
     <ion-label>
@@ -9,7 +9,7 @@
       <h2 class="interlocutor-timestamp">Online {{ getLastConnectionStamp() }}</h2>
     </ion-label>
     <ion-avatar class="align-avatar" slot="start">
-      <img class="profile-picture" [src]="interlocutors[0]?.profilePicture">
+      <img *ngIf="interlocutors" class="profile-picture" [src]="interlocutors[0].profilePicture">
     </ion-avatar>
     <span class="call-icon" (click)="call()">
       <ion-icon name="call"></ion-icon>
@@ -30,16 +30,19 @@
         </ng-template>
       </div>
 
-      <div *ngIf="isInterlocutorWritting" class="writting-status">
-        <ion-avatar class="align-avatar-message" slot="start">
-          <img [src]="img">
-        </ion-avatar>
-        <div class="typing-indicator">
-          <span></span>
-          <span></span>
-          <span></span>
+      <div *ngIf="typers">
+        <div *ngFor="let typer of typers" class="writting-status">
+          <ion-avatar class="align-avatar-message" slot="start">
+            <img [src]="getProfilePictureTyper(typer)">
+          </ion-avatar>
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
       </div>
+
     </div>
     <div class="emo-area">
       <!-- emoji-panel component comes here -->

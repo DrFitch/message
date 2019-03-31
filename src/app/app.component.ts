@@ -6,6 +6,7 @@ import { Platform, ToastController } from '@ionic/angular';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { HelperService } from './core/services/helper.service';
+import { timer } from 'rxjs/internal/observable/timer';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,9 @@ import { HelperService } from './core/services/helper.service';
 })
 
 export class AppComponent {
+
+  showSplash = true;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -32,14 +36,10 @@ export class AppComponent {
       if (this.platform.is('mobile')) {
         this.firebase.subscribe('all');
         this.firebase.onNotificationOpen().subscribe(async res => {
-          console.log('notification !!');
-
           if (res.tap) {
             console.log('notification ouverte avec appli en bg');
           } else {
-            console.log('notification !!');
             this.vibration.vibrate(300);
-            console.log('res', res);
             await this.localNotifications.schedule({
               id: 1,
               led: { color: '#FF00FF', on: 500, off: 500 },
@@ -48,16 +48,16 @@ export class AppComponent {
               text: res.body,
               sound: 'file://sound.mp3',
             });
-            // (await this.toastCtrl.create({
-            //   message: res.body,
-            //   duration: 3000
-            // })).present();
           }
         });
       }
+      this.statusBar.backgroundColorByHexString('#f2f6fa');
       this.statusBar.styleDefault();
-      this.statusBar.backgroundColorByHexString('#ffffff');
       this.splashScreen.hide();
+      timer(6000).subscribe(() => {
+        this.showSplash = false;
+        this.statusBar.backgroundColorByHexString('#fffff');
+      });
     });
   }
 }
