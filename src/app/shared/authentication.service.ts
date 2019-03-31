@@ -58,7 +58,9 @@ export class AuthenticationService {
 
   loginWithPhoneNumber(phoneNumber: string) {
     this.connecting = true;
-    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000);
+    cordova.plugins.firebase.auth.verifyPhoneNumber(phoneNumber, 30000).then(
+      this.router.navigateByUrl(`/verification`)
+    );
   }
 
   updateUserPhoto(photoURL: string, userUID: string) {
@@ -67,12 +69,19 @@ export class AuthenticationService {
     });
   }
 
+  getUserInfos(userId: string): Observable<User> {
+    return this.afs.collection<User>('users').doc(userId).get().pipe(
+      map(data => new User(data.data()))
+    );
+  }
+
   updateUserData(user) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.value.uid}`);
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     return userRef.set({
-      uid: user.value.uid,
-      phoneNumber: user.value.phoneNumber,
-      name: user.value.name,
+      uid: user.uid,
+      phoneNumber: user.phoneNumber,
+      name: user.name,
+      profilePicture: user.profilePicture,
       status: null,
     }, { merge: true });
   }

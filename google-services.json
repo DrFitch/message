@@ -15,6 +15,62 @@
       },
       "oauth_client": [
         {
+          "client_id": "167658830381-16ekrrsqk2hf60mev0eirg6c5gc3pjlh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "def1619dcb0ed3169fa604b65d1131eb00fb1ee1"
+          }
+        },
+        {
+          "client_id": "167658830381-aa8s5rq12ccja7sh8p6767pdq0rt9c1a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "ac496c4e3d57f8af9f82fc0eef2136e45ebde573"
+          }
+        },
+        {
+          "client_id": "167658830381-k9a64qa1ok3f4nip67tjhi5l2qsrd6ge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "3b7c980a65a266a8a41c6e80580284304c2bd7b1"
+          }
+        },
+        {
+          "client_id": "167658830381-fotd0junstr2ksc8ven8hfl0s057qk7d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "3fed1b3ff53722a663e2c51ffd72fd46c891b491"
+          }
+        },
+        {
+          "client_id": "167658830381-q2v16m1stcqmdnuafe20j4tut0oe9dkh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "d33d2aa44ac4fa2b5b5fac62f985503567f53037"
+          }
+        },
+        {
+          "client_id": "167658830381-49tp979qecuee6tnebo7gbjkhia1jios.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "eb775d26e231c11f0a816f6c45ed2e4bc1dc9e22"
+          }
+        },
+        {
+          "client_id": "167658830381-1sk2aaurvtesc44uos9nd7e2mlm7h97o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ynov.message",
+            "certificate_hash": "93a79a487e893e2807ed83af211dc97570b26aa2"
+          }
+        },
+        {
           "client_id": "167658830381-4kiji77m65e68besh8hnhuv42f52kdob.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +85,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "167658830381-4kiji77m65e68besh8hnhuv42f52kdob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

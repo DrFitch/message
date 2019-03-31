@@ -4,6 +4,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { HelperService } from '../core/services/helper.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
+import { User } from 'src/core/models/user';
 
 @Component({
   selector: 'app-settings',
@@ -15,16 +16,21 @@ export class SettingsPage implements OnInit {
 
   @Output() pictureUploaded: EventEmitter<any> = new EventEmitter<any>();
   userUID: string;
+  firstName: string;
+  photoUrl: string;
+  myUser: User;
 
   constructor(private authSvc: AuthenticationService, private camera: Camera,
     private helperSvc: HelperService,
     private storage: AngularFireStorage, ) { }
 
   ngOnInit() {
-    // this.authSvc.user$.subscribe(user => {
-    //   this.userUID = user.uid;
-    // });
-    this.userUID = 'cw1jmSYNk3Yh4wR8C0k1anvNFet2';
+    this.authSvc.user$.subscribe(user => {
+      this.userUID = user.uid;
+      this.myUser = user;
+      this.photoUrl = user.profilePicture;
+      this.firstName = user.name;
+    });
   }
 
   logout() {
@@ -64,12 +70,19 @@ export class SettingsPage implements OnInit {
           console.log('result', result);
           if (this.userUID) {
             this.authSvc.updateUserPhoto(result, this.userUID);
+            this.photoUrl = result;
           }
           // this.isUploading = false;
           // this.auth.updateUserPhoto(user, this.test);
         });
       })).subscribe(() => {
       });
+  }
+
+  setUserNameAndPicture() {
+    this.myUser.name = this.firstName;
+    this.myUser.profilePicture = this.photoUrl;
+    this.authSvc.updateUserData(this.myUser);
   }
 
   newGuid() {

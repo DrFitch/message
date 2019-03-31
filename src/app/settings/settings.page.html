@@ -4,10 +4,21 @@
     Settings
   </h1>
 
-  <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+  <ion-avatar class="userImg" *ngIf="photoUrl" (click)="openCamera()">
+    <img [src]="photoUrl">
+  </ion-avatar>
 
-  <ion-item>
-    <ion-icon name="camera" (click)="openCamera()"></ion-icon>
-  </ion-item>
+  <div class="item">
+    <ion-input class="firstName" placeholder="{{firstName}}" [(ngModel)]="firstName"></ion-input>
+  </div>
 
+  <div class="item">
+    <ion-button *ngIf="!connecting" [disabled]="!firstName && !photoUrl" (click)="setUserNameAndPicture()">
+      Continuer
+    </ion-button>
+  </div>
+
+  <div class="item">
+    <ion-button color="danger" (click)="logout()">Déconnexion</ion-button>
+  </div>
 </ion-content>

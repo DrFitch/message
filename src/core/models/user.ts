@@ -6,6 +6,7 @@ export class User {
     status: any;
     friendList?: string[];
     photoUrl?: string;
+    profilePicture?: string;
 
 
     constructor(data: any) {
