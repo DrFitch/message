@@ -1,50 +1,65 @@
 #main-searchbar {
-  padding-right: 6px;
+    padding-right: 6px;
 }
 
 .header-search {
-  display: flex;
+    display: flex;
 }
 
 .new-conversation-button {
-  height: 27px;
-  width: 32px;
-  margin-top: 13px;
-  margin-right: 24px;
+    height: 27px;
+    width: 32px;
+    margin-top: 13px;
+    margin-right: 24px;
 }
 
 .new-conversation-icon {
-  font-size: 14px !important;
-  position: absolute;
+    font-size: 14px !important;
+    position: absolute;
 }
 
 .fit-message {
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 95%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 95%;
 }
 
 .presence-light {
-  width: 12px;
-  height: 12px;
-  background-color: grey;
-  position: absolute;
-  left: 45px;
-  top: 45px;
-  border-radius: 50%;
-  border: 2px solid white;
+    width: 12px;
+    height: 12px;
+    background-color: grey;
+    position: absolute;
+    left: 45px;
+    top: 45px;
+    border-radius: 50%;
+    border: 2px solid white;
 }
 
 .online {
-  background-color: #45dd45 !important;
+    background-color: #45dd45 !important;
 }
 
 .away {
-  background-color: orange !important;
+    background-color: orange !important;
 }
 
 .offline {
-  background-color: red !important;
+    background-color: red !important;
+}
+
+#loader {
+    position: absolute;
+    margin: 0;
+    top: 68%;
+    left: 46%;
+}
+
+.no-conversations {
+    color: darkgrey;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 65%;
 }

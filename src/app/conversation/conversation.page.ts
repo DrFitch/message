@@ -17,10 +17,8 @@ export class ConversationPage implements OnInit {
 
   user: User;
   userUid: string;
-
-  img = 'https://pbs.twimg.com/profile_images/1034412801341710336/Hr_el9Ra.jpg';
-
-  conversations: Conversation[] = [];
+  isLoading = false;
+  conversations: Conversation[];
 
   constructor(
     private router: Router,
@@ -35,9 +33,10 @@ export class ConversationPage implements OnInit {
   }
 
   loadConversations() {
+    this.isLoading = true;
     this.conversationSvc.getConversationsForUser(this.user.uid).subscribe(conversations => {
       this.conversations = conversations;
-      console.log('this.conversation', conversations);
+      this.isLoading = false;
     });
   }
 

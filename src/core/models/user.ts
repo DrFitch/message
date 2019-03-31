@@ -1,13 +1,11 @@
 export class User {
 
-    uid: string;
-    name?: string;
-    phoneNumber?: string;
-    status: any;
-    friendList?: string[];
-    photoUrl?: string;
-    profilePicture?: string;
-
+    public uid: string;
+    public name?: string;
+    public phoneNumber: string;
+    public status: any;
+    public friendList?: string[];
+    public profilePicture: string;
 
     constructor(data: any) {
         for (const key in data) {

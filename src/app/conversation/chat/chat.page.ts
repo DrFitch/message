@@ -5,6 +5,9 @@ import { orderBy } from 'lodash';
 import { MarkdownService } from 'ngx-markdown';
 import { Message } from 'src/core/models/message';
 import { ConversationService } from '../conversation.service';
+import { AuthenticationService } from 'src/app/shared/authentication.service';
+import { User } from 'src/core/models/user';
+import { Conversation } from 'src/core/models/conversation';
 
 @Component({
   selector: 'app-chat',
@@ -25,7 +28,8 @@ export class ChatPage implements OnInit {
   isInterlocutorWritting = true;
   conversationId;
   isLoading: boolean;
-  userUid: string;
+  user: User;
+  conversation: Conversation;
 
   itemExpandWidth = 80;
   isExpanded = true;
@@ -35,22 +39,25 @@ export class ChatPage implements OnInit {
     private conversationSvc: ConversationService,
     private markdownService: MarkdownService,
     private menu: MenuController,
+    private authSvc: AuthenticationService
   ) { }
 
   ngOnInit() {
     this.conversationId = this.route.snapshot.paramMap.get('uid');
     if (this.conversationId) {
-      this.loadMessages();
-      this.userUid = 'cw1jmSYNk3Yh4wR8C0k1anvNFet2';
+      this.authSvc.user$.subscribe(user => {
+        this.user = user;
+        this.load();
+      });
     }
-
-
     document.querySelector('ion-tab-bar').style.display = 'none';
-
   }
 
-  loadMessages(): any {
+  load(): any {
     this.isLoading = true;
+    this.conversationSvc.getConversation(this.conversationId).subscribe(conversation => {
+      console.log('conversation', conversation);
+    });
     this.conversationSvc.getMessages(this.conversationId).subscribe(messages => {
       this.messages = orderBy(messages, ['createdAt'], ['asc']);
       this.isLoading = false;
@@ -61,10 +68,10 @@ export class ChatPage implements OnInit {
   sendMessage() {
     this.scrollToBottom();
     if (this.message !== '') {
-      this.conversationSvc.addMessages(this.conversationId, this.userUid, this.message).subscribe(() => {
+      this.conversationSvc.addMessages(this.conversationId, this.user.uid, this.message).subscribe(() => {
         this.conversationSvc.registerDisplayMessage(this.conversationId, this.markdownService.compile(this.message));
         this.message = '';
-        this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
+        this.conversationSvc.unsetUserTyping(this.conversationId, this.user.uid);
       });
     }
   }
@@ -91,7 +98,7 @@ export class ChatPage implements OnInit {
   }
 
   emitUserTyping(): void {
-    this.conversationSvc.setUserIsTyping(this.conversationId, this.userUid);
+    this.conversationSvc.setUserIsTyping(this.conversationId, this.user.uid);
   }
 
   registerDisplayMessage() {
@@ -102,8 +109,8 @@ export class ChatPage implements OnInit {
     const endGroup = senderId !== this.previousSenderId;
     this.previousSenderId = senderId;
     return {
-      incoming: this.userUid !== senderId,
-      outgoing: this.userUid === senderId,
+      incoming: this.user.uid !== senderId,
+      outgoing: this.user.uid === senderId,
       grouped: endGroup
     };
   }
@@ -122,12 +129,11 @@ export class ChatPage implements OnInit {
   }
 
   sendPictures(e) {
-    console.log('sendPictures e', e);
     this.scrollToBottom();
-    this.conversationSvc.sendPicture(this.conversationId, this.userUid, e).subscribe(() => {
+    this.conversationSvc.sendPicture(this.conversationId, this.user.uid, e).subscribe(() => {
       this.conversationSvc.registerDisplayMessage(this.conversationId, '(Picture)');
       this.message = '';
-      this.conversationSvc.unsetUserIsTyping(this.conversationId, this.userUid);
+      this.conversationSvc.unsetUserTyping(this.conversationId, this.user.uid);
     });
   }
 
