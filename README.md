@@ -31,7 +31,7 @@ Problème connus :
         }
       }
   ```
-+ ***Compilation (google_id)*** - Problème de récupération du fichier google-service.json par le plugin cordova firebase
++ ***Compilation (google-service)*** - Problème de récupération du fichier google-service.json par le plugin cordova firebase
   + Se rendre dans `plugins/cordova-plugin-firebase/scripts/after_prepare.js`
   + Changer la ligne : 
   ```sh
