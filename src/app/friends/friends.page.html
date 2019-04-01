@@ -7,7 +7,7 @@
   <ion-searchbar id="main-searchbar" mode="ios" (ionChange)="searchContacts($event.target.value)" debounce="300">
   </ion-searchbar>
 
-  <div *ngIf="searchTerm === ''">
+  <div>
     <ion-list>
       <ion-list-header>
         <ion-label>Suggestions</ion-label>

@@ -19,7 +19,6 @@ export class AuthenticationService {
 
   connecting = false;
   userSubject = new BehaviorSubject<User>(null);
-  userTest: User;
 
   constructor(
     platform: Platform,
@@ -93,7 +92,7 @@ export class AuthenticationService {
 
   logout() {
     this.userSubject.next(null);
-    // this.subjectUser$.next(null);
+    // this.subjectUser.next(null);
     this.router.navigateByUrl('/login');
   }
 

@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { AvatarModule } from 'ngx-avatar';
+import { ExpandableModule } from '../shared/expandable/expandable.module';
 import { ConversationPage } from './conversation.page';
 import { ConversationService } from './conversation.service';
 import { NewConversationPage } from './new-conversation/new-conversation.page';
-import { ExpandableModule } from '../shared/expandable/expandable.module';
 
 const routes: Routes = [
   {

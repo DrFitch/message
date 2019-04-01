@@ -1,0 +1,38 @@
+<ion-content padding>
+  <h2>Friends</h2>
+
+  <ion-list *ngIf="addFriend">
+    <ion-label>Select the friend you want to add to the conversation</ion-label>
+    <ion-item *ngFor="let friend of friendsList" lines="none">
+      <ion-avatar *ngIf="friend.profilePicture" slot="start">
+        <img [src]="friend.profilePicture">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ friend.name }}</h2>
+        <p *ngIf="friend.phoneNumber; else noNumber"> {{ friend.phoneNumber[0].value }} </p>
+        <ng-template #noNumber>
+          <p>No number</p>
+        </ng-template>
+      </ion-label>
+      <!-- *ngIf="isInConv(friend.uid)" -->
+      <ion-icon *ngIf="isInConv(friend.uid)" name="person-add" (click)="selectUser(friend.uid)"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="removeFriend">
+    <ion-label>Select the friend you want to remove from the conversation</ion-label>
+    <ion-item *ngFor="let member of membersList" lines="none">
+      <ion-avatar *ngIf="member.profilePicture" slot="start">
+        <img [src]="member.profilePicture">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ member.name }}</h2>
+        <p *ngIf="member.phoneNumber; else noNumber"> {{ member.phoneNumber[0].value }} </p>
+        <ng-template #noNumber>
+          <p>No number</p>
+        </ng-template>
+      </ion-label>
+      <ion-icon name="remove-circle-outline" (click)="selectUser(member.uid)"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>

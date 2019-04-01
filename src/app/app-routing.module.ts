@@ -11,7 +11,8 @@ const routes: Routes = [
     path: 'new-conversation',
     loadChildren: './conversation/new-conversation/new-conversation.module#NewConversationPageModule'
   },
-  { path: 'gallery-modal', loadChildren: './shared/expandable/gallery-modal/gallery-modal.module#GalleryModalPageModule' },
+  { path: 'gallery-modal', loadChildren: './shared/expandable/gallery-modal/gallery-modal.module#GalleryModalPageModule' },  { path: 'friend-modal', loadChildren: './conversation/chat/friends-modal/friend-modal/friend-modal.module#FriendModalPageModule' },
+
 ];
 @NgModule({
   imports: [

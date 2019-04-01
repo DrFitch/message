@@ -11,9 +11,15 @@
     <ion-avatar class="align-avatar" slot="start">
       <img *ngIf="interlocutors" class="profile-picture" [src]="interlocutors[0].profilePicture">
     </ion-avatar>
-    <span class="call-icon" (click)="call()">
-      <ion-icon name="call"></ion-icon>
+    <span class="call-icon" (click)="openFriendsRemoveModal()" style="margin-right:30px;">
+      <ion-icon name="remove-circle-outline"></ion-icon>
     </span>
+    <span *ngIf="isAdmin()" class="call-icon" (click)="openFriendsModal()">
+      <ion-icon name="person-add"></ion-icon>
+    </span>
+    <!-- <span class="call-icon" (click)="call()">
+      <ion-icon name="call"></ion-icon>
+    </span> -->
   </ion-toolbar>
 </ion-header>
 

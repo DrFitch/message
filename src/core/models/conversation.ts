@@ -9,6 +9,7 @@ export class Conversation {
     users: User[];
     status: any;
     typingUsers: [];
+    admin: string;
 
     constructor(data: any) {
         for (const key in data) {

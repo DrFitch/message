@@ -1,19 +1,21 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MenuController } from '@ionic/angular';
+import { MenuController, ModalController } from '@ionic/angular';
 import { orderBy } from 'lodash';
-import { MarkdownService } from 'ngx-markdown';
-import { Message } from 'src/core/models/message';
-import { ConversationService } from '../conversation.service';
-import { AuthenticationService } from 'src/app/shared/authentication.service';
-import { User } from 'src/core/models/user';
-import { Conversation } from 'src/core/models/conversation';
 import * as moment from 'moment';
+import { MarkdownService } from 'ngx-markdown';
+import { AuthenticationService } from 'src/app/shared/authentication.service';
+import { Conversation } from 'src/core/models/conversation';
+import { Message } from 'src/core/models/message';
+import { User } from 'src/core/models/user';
+import { ConversationService } from '../conversation.service';
+import { FriendModalPage } from './friends-modal/friend-modal/friend-modal.page';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
+  entryComponents: [FriendModalPage]
 })
 export class ChatPage implements OnInit {
 
@@ -37,13 +39,15 @@ export class ChatPage implements OnInit {
   isExpanded = true;
   typers = [];
   membersNonFiltered;
+  friendUid: string;
 
   constructor(
     private route: ActivatedRoute,
     private conversationSvc: ConversationService,
     private markdownService: MarkdownService,
     private menu: MenuController,
-    private authSvc: AuthenticationService
+    private authSvc: AuthenticationService,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -79,6 +83,44 @@ export class ChatPage implements OnInit {
     this.conversationSvc.getTypingUsers(this.conversationId).subscribe(typers => {
       this.typers = typers;
     });
+  }
+
+  async openFriendsModal() {
+    const modal = await this.modalController.create({
+      component: FriendModalPage,
+      componentProps: {
+        addFriend: true,
+        removeFriend: false,
+        conversationId: this.conversationId
+      }
+    });
+    modal.onDidDismiss()
+      .then((data) => {
+        this.friendUid = data['data']; // Here's your selected user!
+        if (this.friendUid) {
+          this.conversationSvc.addFriendToConversation(this.conversationId, this.friendUid);
+        }
+      });
+    return await modal.present();
+  }
+
+  async openFriendsRemoveModal() {
+    const modal = await this.modalController.create({
+      component: FriendModalPage,
+      componentProps: {
+        addFriend: false,
+        removeFriend: true,
+        conversationId: this.conversationId
+      }
+    });
+    modal.onDidDismiss()
+      .then((data) => {
+        this.friendUid = data['data']; // Here's your selected user!
+        if (this.friendUid) {
+          this.conversationSvc.removeFriendFromConversation(this.conversationId, this.friendUid);
+        }
+      });
+    return await modal.present();
   }
 
   sendMessage() {
@@ -160,6 +202,17 @@ export class ChatPage implements OnInit {
       }
       return moment(this.interlocutors[0].timestamp).toNow(true) + ' ago';
     }
+  }
+
+  isAdmin() {
+    this.conversationSvc.getConversation(this.conversationId).subscribe(conversation => {
+      if (conversation.admin) {
+        if (this.user.uid === conversation.admin) {
+          return true;
+        }
+        return false;
+      }
+    });
   }
 
   call() {

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConversationService } from '../conversation.service';
+import { FriendsService } from 'src/app/friends/friends.service';
 import { AuthenticationService } from 'src/app/shared/authentication.service';
 import { User } from 'src/core/models/user';
-import { FriendsService } from 'src/app/friends/friends.service';
+import { ConversationService } from '../conversation.service';
 
 declare var navigator;
 declare var ContactFindOptions;

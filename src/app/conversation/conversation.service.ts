@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { firestore } from 'firebase';
 import { from, Observable } from 'rxjs';
-import { map, take, first, flatMap, switchMap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Conversation } from 'src/core/models/conversation';
 import { User } from 'src/core/models/user';
 import { AuthenticationService } from '../shared/authentication.service';
-import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -164,5 +164,17 @@ export class ConversationService {
 
   deleteConversation(conversationId: string) {
     return this.afs.doc(`conversations/${conversationId}`).delete();
+  }
+
+  addFriendToConversation(conversationId: string, friendUid: string) {
+    return this.afs.doc(`conversations/${conversationId}`).update({
+      members: firestore.FieldValue.arrayUnion(friendUid)
+    });
+  }
+
+  removeFriendFromConversation(conversationId: string, friendUid: string) {
+    return this.afs.doc(`conversations/${conversationId}`).update({
+      members: firestore.FieldValue.arrayRemove(friendUid)
+    });
   }
 }

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/core/models/user';
-import { FriendsService } from './friends.service';
 import { AuthenticationService } from '../shared/authentication.service';
-import { remove } from 'lodash';
+import { FriendsService } from './friends.service';
 
 declare var navigator;
 declare var ContactFindOptions;
