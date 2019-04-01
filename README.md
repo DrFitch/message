@@ -1,5 +1,6 @@
 # Messenger [![build sucsess](https://img.shields.io/badge/build-success-green.svg?style=flat)](https://github.com/DrFitch/message) ![build sucsess](https://img.shields.io/github/issues/detail/title/drfitch/message/1.svg?color=red)
 
+![test image size](https://im3.ezgif.com/tmp/ezgif-3-47d5ea01ec91.gif)
 
 ### Application Ionic v4 de messagerie instantanée développé par Pierre & François.
 
