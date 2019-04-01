@@ -9,7 +9,7 @@
       <h2 class="interlocutor-timestamp">Online {{ getLastConnectionStamp() }}</h2>
     </ion-label>
     <ion-avatar class="align-avatar" slot="start">
-      <img *ngIf="interlocutors" class="profile-picture" [src]="interlocutors[0].profilePicture">
+      <img *ngIf="interlocutors" class="profile-picture" [src]="interlocutors[0]?.profilePicture">
     </ion-avatar>
     <span class="call-icon" (click)="call()">
       <ion-icon name="call"></ion-icon>
@@ -57,7 +57,8 @@
           </div>
         </expandable>
         <ion-input #inputMessage class="input-message" type="text" name="message" id="message" [(ngModel)]="message"
-          placeholder="Type a message..." (click)="emitUserTyping(); scrollToBottom(); closeCollapside()">
+          placeholder="Type a message..." (click)="scrollToBottom(); closeCollapside()"
+          (ionChange)="typingOversight($event)">
         </ion-input>
         <button (click)="inputMessage.setFocus()">
           <ion-icon [ngStyle]="{'color': message !== '' ? '#09f' : '' }" name="send" style="font-size: 24px;">

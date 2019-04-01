@@ -79,7 +79,8 @@ export class ConversationService {
     })).pipe(
       map(document => {
         this.afs.collection('conversations').doc(document.id).set({
-          members: members
+          members: members,
+          admin: creatorId
         });
         return document.id;
       })
