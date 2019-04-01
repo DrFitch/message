@@ -38,7 +38,6 @@ export class AppComponent {
       if (this.platform.is('mobile')) {
         this.firebase.subscribe('all');
         this.firebase.onNotificationOpen().subscribe(async res => {
-          console.log('res', res);
           if (res.tap) {
             this.router.navigateByUrl(`tabs/conversations/${res.conversationId}`);
           } else {
