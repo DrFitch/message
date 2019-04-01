@@ -81,7 +81,7 @@ export class ChatPage implements OnInit {
       this.scrollToBottom();
     });
     this.conversationSvc.getTypingUsers(this.conversationId).subscribe(typers => {
-      this.typers = typers;
+      this.typers = typers.filter(x => x !== this.user.uid);
     });
   }
 
@@ -159,6 +159,10 @@ export class ChatPage implements OnInit {
     this.conversationSvc.setUserIsTyping(this.conversationId, this.user.uid);
   }
 
+  unsetUserTyping(): void {
+    this.conversationSvc.unsetUserTyping(this.conversationId, this.user.uid);
+  }
+
   displayTabBar() {
     document.querySelector('ion-tab-bar').style.display = 'flex';
   }
@@ -221,5 +225,13 @@ export class ChatPage implements OnInit {
 
   getProfilePictureTyper(uid) {
     return this.interlocutors.find(x => x.uid === uid).profilePicture;
+  }
+
+  typingOversight(message) {
+    if (message.detail.value === '') {
+      this.unsetUserTyping();
+    } else {
+      this.emitUserTyping();
+    }
   }
 }

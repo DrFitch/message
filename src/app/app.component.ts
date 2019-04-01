@@ -7,6 +7,7 @@ import { Vibration } from '@ionic-native/vibration/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { HelperService } from './core/services/helper.service';
 import { timer } from 'rxjs/internal/observable/timer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,8 @@ export class AppComponent {
     private toastCtrl: ToastController,
     private vibration: Vibration,
     private localNotifications: LocalNotifications,
-    private helperSvc: HelperService
+    private helperSvc: HelperService,
+    private router: Router
   ) {
     this.initializeApp();
   }
@@ -37,7 +39,7 @@ export class AppComponent {
         this.firebase.subscribe('all');
         this.firebase.onNotificationOpen().subscribe(async res => {
           if (res.tap) {
-            console.log('notification ouverte avec appli en bg');
+            this.router.navigateByUrl(`tabs/conversations/${res.conversationId}`);
           } else {
             this.vibration.vibrate(300);
             await this.localNotifications.schedule({

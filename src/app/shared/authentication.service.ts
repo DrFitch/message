@@ -19,6 +19,7 @@ export class AuthenticationService {
 
   connecting = false;
   userSubject = new BehaviorSubject<User>(null);
+  userUid;
 
   constructor(
     platform: Platform,
@@ -35,6 +36,7 @@ export class AuthenticationService {
             .then(docSnapshot => {
               if (docSnapshot.exists) {
                 this.userSubject.next(new User(docSnapshot.data()));
+                this.userUid = docSnapshot.data().uid;
                 this.router.navigateByUrl(`/tabs/conversations`);
               } else {
                 this.afs.doc(`users/${userInfo.uid}`).set({
@@ -92,7 +94,6 @@ export class AuthenticationService {
 
   logout() {
     this.userSubject.next(null);
-    // this.subjectUser.next(null);
     this.router.navigateByUrl('/login');
   }
 
@@ -101,14 +102,11 @@ export class AuthenticationService {
   }
 
   async setPresence(status: string) {
-    // const user = await this.getUser();
-    // if (user) {
-    this.afs.doc(`users/IGyZdaotm2s87FpWAaVk`).update({
+    this.afs.doc(`users/${this.userUid}`).update({
       status,
       timestamp: Date.now()
     });
-    return this.db.object(`status/IGyZdaotm2s87FpWAaVk`).update({ status, timestamp: this.timestamp });
-    // }
+    return this.db.object(`status/${this.userUid}`).update({ status, timestamp: this.timestamp });
   }
 
   get timestamp() {
